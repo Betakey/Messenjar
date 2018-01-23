@@ -40,7 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Packet.cs" />
+    <Compile Include="PacketRequestDisconnect.cs" />
+    <Compile Include="PacketSendDisconnect.cs" />
     <Compile Include="PacketSendID.cs" />
+    <Compile Include="PacketSendText.cs" />
+    <Compile Include="PacketSendUniText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

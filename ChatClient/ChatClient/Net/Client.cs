@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 using System.Net;
@@ -21,5 +22,16 @@ namespace ChatClient.Net
         public StreamWriter Out { get; private set; }
 
         public StreamReader In { get; private set; }
+
+        public TcpClient TClient { get; private set; }
+
+        public Client(TcpClient client, ChatClient chatClient)
+        {
+            TClient = client;
+            Out = new StreamWriter(TClient.GetStream());
+            In = new StreamReader(TClient.GetStream());
+
+        }
     }
 }
+
