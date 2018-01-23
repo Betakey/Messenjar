@@ -1,11 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\ChatClient",
-    "\\ChatClient\\ChatClient",
-    "\\ChatClient\\ChatClient\\bin",
-    "\\ChatClient\\NetDLL",
-    "\\ChatClient\\NetDLL\\bin"
+    ""
   ],
   "PreviewInSolutionExplorer": false
 }
