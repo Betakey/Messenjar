@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NetDLL
 {
     [Serializable]
-    class PacketSendText : Packet
+    public class PacketSendText : Packet
     {
         public string Text { get; private set; }
 

@@ -12,7 +12,7 @@ namespace NetDLL
     public abstract class Packet
     {
         /// <summary>
-        /// Wandelt ACSCII in Bytes um
+        /// Converts an ASCII String to a Packet Object via Deserialization
         /// </summary>
         public static Packet ToPacket(string str)
         {
@@ -24,7 +24,7 @@ namespace NetDLL
             return obj as Packet;
         }
         /// <summary>
-        /// ToString Methode wandelt den String in ASCII um 
+        /// Converts a Packet Object to an ASCII String via Serialization
         /// </summary>
         public override string ToString()
         {
