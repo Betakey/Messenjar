@@ -17,7 +17,7 @@ namespace ChatServer.IO
         public UserDataManager()
         {
             dirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\data\\users";
-            if (!Directory.Exists(dirPath)) Directory.Exists(dirPath);
+            if (!Directory.Exists(dirPath)) Directory.CreateDirectory(dirPath);
             Datas = new List<UserData>();
             foreach (string filePath in Directory.GetFiles(dirPath))
             {

@@ -15,7 +15,7 @@ namespace ChatServer
 
         static void Main(string[] args)
         {
-            Instance = new Program();
+            new Program();
         }
 
         public NetworkServer NetworkServer { get; private set; }
@@ -28,6 +28,7 @@ namespace ChatServer
 
         public Program()
         {
+            Instance = this;
             PreInit();
             Init();
             PostInit();

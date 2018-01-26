@@ -18,13 +18,20 @@ namespace ChatServer.Net
 
         public BackUpServerHandler()
         {
-            if (Program.Instance.Config.AsString(ConfigKey.IPType).ToLower() == "localhost")
+            try
+            {
+                if (Program.Instance.Config.AsString(ConfigKey.IPType).ToLower() == "localhost")
+                {
+                    ip = "127.0.0.1";
+                }
+                else if (Program.Instance.Config.AsString(ConfigKey.IPType).ToLower() == "external")
+                {
+                    ip = NetUtils.GetExternalIPAddress().ToString();
+                }
+            }
+            catch
             {
                 ip = "127.0.0.1";
-            }
-            else if (Program.Instance.Config.AsString(ConfigKey.IPType).ToLower() == "external")
-            {
-                ip = NetUtils.GetExternalIPAddress().ToString();
             }
             BackUpServers = new List<NetworkServer>();
             port = Program.Instance.Config.AsInt(ConfigKey.PortRangeMin);
