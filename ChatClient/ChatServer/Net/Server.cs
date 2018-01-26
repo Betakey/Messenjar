@@ -22,12 +22,15 @@ namespace ChatServer.Net
 
         public Thread AcceptThread { get; private set; }
 
+        public bool IsAlive { get; private set; }
+
         public Server(string ip, int port)
         {
             IP = IPAddress.Parse(ip);
             Port = port;
             Clients = new List<ServerHandledClient>();
             Listener = new TcpListener(IP, Port);
+            IsAlive = false;
         }
 
         /// <summary>
@@ -36,6 +39,7 @@ namespace ChatServer.Net
         /// </summary>
         public void Start()
         {
+            IsAlive = true;
             Console.WriteLine("[" + Port + "] <> Start Server on " + IP + "...");
             Console.WriteLine("[" + Port + "] <> Start Listening...");
             Listener.Start();
@@ -66,6 +70,7 @@ namespace ChatServer.Net
             Console.WriteLine("[" + Port + "] <> Stopping Accepting Thread...");
             AcceptThread.Abort();
             Console.WriteLine("[" + Port + "] <> Accepting Thread stopped!");
+            IsAlive = false;
         }
 
         /// <summary>
@@ -73,13 +78,20 @@ namespace ChatServer.Net
         /// </summary>
         private void Accept()
         {
-            while (true)
+            try
             {
-                TcpClient client = Listener.AcceptTcpClient();
-                Console.WriteLine("[" + Port + "] -> Client accepted (IP-Endpoint: " + client.Client.LocalEndPoint + ")");
-                ServerHandledClient handledClient = new ServerHandledClient(client, this);
-                Clients.Add(handledClient);
-                handledClient.SendPacket(new PacketSendID(handledClient.ID));
+                while (IsAlive)
+                {
+                    TcpClient client = Listener.AcceptTcpClient();
+                    Console.WriteLine("[" + Port + "] -> Client accepted (IP-Endpoint: " + client.Client.LocalEndPoint + ")");
+                    ServerHandledClient handledClient = new ServerHandledClient(client, this);
+                    Clients.Add(handledClient);
+                    handledClient.SendPacket(new PacketSendID(handledClient.ID));
+                }
+            }
+            catch
+            {
+                // There would be an Exception which is a little bit weird but not important cause its get thrown when the program shuts down
             }
         }
 

@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IO\Config.cs" />
+    <Compile Include="IO\ConfigKey.cs" />
     <Compile Include="Net\Server.cs" />
     <Compile Include="Net\ServerHandledClient.cs" />
     <Compile Include="Program.cs" />
