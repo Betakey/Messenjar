@@ -11,6 +11,9 @@ namespace NetDLL
     [Serializable]
     public abstract class Packet
     {
+        /// <summary>
+        /// Wandelt ACSCII in Bytes um
+        /// </summary>
         public static Packet ToPacket(string str)
         {
             BinaryFormatter bf = new BinaryFormatter();
@@ -20,7 +23,9 @@ namespace NetDLL
             ms.Close();
             return obj as Packet;
         }
-
+        /// <summary>
+        /// ToString Methode wandelt den String in ASCII um 
+        /// </summary>
         public override string ToString()
         {
             BinaryFormatter bf = new BinaryFormatter();
