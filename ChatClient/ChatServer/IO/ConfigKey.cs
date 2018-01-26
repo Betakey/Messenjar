@@ -8,6 +8,6 @@ namespace ChatServer.IO
 {
     public enum ConfigKey
     {
-        Port, IPType
+        PortRangeMin, ExceptionPorts, IPType
     }
 }

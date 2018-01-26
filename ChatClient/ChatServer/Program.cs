@@ -18,9 +18,13 @@ namespace ChatServer
             Instance = new Program();
         }
 
-        public Server Server { get; private set; }
+        public NetworkServer NetworkServer { get; private set; }
 
         public Config Config { get; private set; }
+
+        public UserDataManager UserDataManager { get; private set; }
+
+        public BackUpServerHandler BackUpServerHandler { get; private set; }
 
         public Program()
         {
@@ -72,6 +76,10 @@ namespace ChatServer
             Config = new Config();
             Console.WriteLine("<> Config loaded!");
             Console.CursorVisible = false;
+            Console.WriteLine("<> Loading User Data...");
+            UserDataManager = new UserDataManager();
+            Console.WriteLine("<> User Data loaded!");
+            BackUpServerHandler = new BackUpServerHandler();
         }
 
         private void Init()
@@ -85,8 +93,8 @@ namespace ChatServer
             {
                 ip = NetUtils.GetExternalIPAddress().ToString();
             }
-            Server = new Server(ip, Config.AsInt(ConfigKey.Port));
-            Server.Start();
+            NetworkServer = new NetworkServer(ip, 34563);
+            NetworkServer.Start();
         }
 
         private void PostInit()
@@ -101,8 +109,8 @@ namespace ChatServer
                     ConsoleKey actionKey = Console.ReadKey().Key;
                     if (actionKey == ConsoleKey.Y || actionKey == ConsoleKey.J)
                     {
-                        if (Server.IsAlive)
-                            Server.Stop();
+                        if (NetworkServer.IsAlive)
+                            NetworkServer.Stop();
                         break;
                     }
                     Console.WriteLine("");

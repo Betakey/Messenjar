@@ -34,7 +34,8 @@ namespace ChatServer.IO
             if (!File.Exists(path))
             {
                 configContent.Add(ConfigKey.IPType, "localhost");
-                configContent.Add(ConfigKey.Port, "34563");
+                configContent.Add(ConfigKey.PortRangeMin, "30000");
+                configContent.Add(ConfigKey.ExceptionPorts, "34563");
                 Save();
             }
             else

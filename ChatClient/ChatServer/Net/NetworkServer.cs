@@ -6,11 +6,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ChatServer.IO;
 using NetDLL;
+using NetDLL.Data;
 
 namespace ChatServer.Net
 {
-    public class Server
+    public class NetworkServer
     {
         public int Port { get; private set; }
 
@@ -24,7 +26,7 @@ namespace ChatServer.Net
 
         public bool IsAlive { get; private set; }
 
-        public Server(string ip, int port)
+        public NetworkServer(string ip, int port)
         {
             IP = IPAddress.Parse(ip);
             Port = port;
@@ -95,13 +97,63 @@ namespace ChatServer.Net
             }
         }
 
+        public ServerHandledClient GetClient(string name)
+        {
+            try
+            {
+                return Clients.Find(x => x.Name == name);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// The Event which get called when a Packet comes in from a Client
         /// The Event is then handling the incoming Packets
         /// </summary>
         public void OnPacketReceived(ServerHandledClient client, Packet packet)
         {
-            
+            if (packet is PacketSendText)
+            {
+                PacketSendText _packet = (PacketSendText)packet;
+                // Sender
+                UserData data = Program.Instance.UserDataManager.GetData(client.Name);
+                if (data == null)
+                {
+                    data = new UserData(client.Name);
+                    Program.Instance.UserDataManager.Datas.Add(data);
+                }
+                data.MessageHistory.Add(new MessageData(_packet));
+                client.SendPacket(new PacketSendHistory(data.SortMessageByDate()));
+                // Receiver
+                UserData receiverData = Program.Instance.UserDataManager.GetData(_packet.Receiver);
+                if (receiverData == null)
+                {
+                    receiverData = new UserData(_packet.Receiver);
+                    Program.Instance.UserDataManager.Datas.Add(receiverData);
+                }
+                receiverData.MessageHistory.Add(new MessageData(client.Name, _packet.Text, _packet.Time));
+                ServerHandledClient receiver = Program.Instance.NetworkServer.GetClient(_packet.Receiver);
+                if (receiver != null)
+                {
+                    receiver.SendPacket(new PacketSendHistory(receiverData.SortMessageByDate()));
+                }
+                else
+                {
+                    ServerHandledClient networkReceiver =
+                        Program.Instance.BackUpServerHandler.GetClient(_packet.Receiver);
+                    if (networkReceiver != null)
+                    {
+                        networkReceiver.SendPacket(new PacketSendHistory(receiverData.SortMessageByDate()));
+                    }
+                    else
+                    {
+                        receiverData.NewMessages.Add(client.Name);
+                    }
+                }
+            }
         }
 
         /// <summary>

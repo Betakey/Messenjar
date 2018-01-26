@@ -24,9 +24,9 @@ namespace ChatServer.Net
 
         public Thread Thread { get; private set; }
 
-        private Server server;
+        private NetworkServer server;
 
-        public ServerHandledClient(TcpClient client, Server server)
+        public ServerHandledClient(TcpClient client, NetworkServer server)
         {
             this.server = server;
             Client = client;
