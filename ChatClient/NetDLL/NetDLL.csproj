@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cryptor.cs" />
     <Compile Include="Packet.cs" />
     <Compile Include="PacketSendID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
