@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetDLL
+namespace ChatServer.IO
 {
-    [Serializable]
-    public class PacketSendDisconnect : Packet
+    public enum ConfigKey
     {
-
+        PortRangeMin, ExceptionPorts, IPType
     }
 }

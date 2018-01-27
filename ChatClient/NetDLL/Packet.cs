@@ -11,27 +11,29 @@ namespace NetDLL
     [Serializable]
     public abstract class Packet
     {
-        
-        public static Packet ToPacket(byte[] bytes)
+        /// <summary>
+        /// Converts an ASCII String to a Packet Object via Deserialization
+        /// </summary>
+        public static Packet ToPacket(string str)
         {
-            MemoryStream ms = new MemoryStream(bytes)
-            {
-                Position = 0
-            };
             BinaryFormatter bf = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream(Encoding.ASCII.GetBytes(str));
+            ms.Position = 0;
             object obj = bf.Deserialize(ms);
             ms.Close();
             return obj as Packet;
         }
-       
+        /// <summary>
+        /// Converts a Packet Object to an ASCII String via Serialization
+        /// </summary>
         public override string ToString()
         {
-            MemoryStream ms = new MemoryStream();
             BinaryFormatter bf = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
             bf.Serialize(ms, this);
-            byte[] bytes = ms.GetBuffer();
+            string str = Encoding.ASCII.GetString(ms.GetBuffer());
             ms.Close();
-            return Encoding.ASCII.GetString(bytes);
+            return str;
         }
     }
 }

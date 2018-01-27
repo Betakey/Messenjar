@@ -7,16 +7,19 @@ using System.Threading.Tasks;
 namespace NetDLL
 {
     [Serializable]
-   public class PacketSendText : Packet
+    public class PacketSendText : Packet
     {
         public string Text { get; private set; }
 
-        public string Sender { get; private set; }
+        public DateTime Time { get; private set; }
 
-        public PacketSendText(string text, string sender)
+        public string Receiver { get; private set; }
+
+        public PacketSendText(string text, string receiver)
         {
             Text = text;
-            Sender = sender;
+            Receiver = receiver;
+            Time = DateTime.Now;
         }
     }
 }

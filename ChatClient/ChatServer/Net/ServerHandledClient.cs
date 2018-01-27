@@ -54,6 +54,7 @@ namespace ChatServer.Net
         public void SendPacket(Packet packet)
         {
             Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
+            //Out.WriteLine(Cryptor.Encrypt(ID.ToString(), packet.ToString()));
             Out.WriteLine(packet.ToString());
             Out.Flush();
         }
@@ -63,7 +64,7 @@ namespace ChatServer.Net
         /// Converts the incoming Data to a Packet Object
         /// Gives the Packet Object to the Server PacketReceived Event
         /// 
-        /// When a Exception gets thrown, the Client will be disconnected and deleted from the Server Clients List to prevent Server Crashes our lost of Data
+        /// When a Exception gets thrown, the Client will be disconnected and deleted from the Server Clients List to prevent Server Crashes or lost of Data
         /// </summary>
         private void Receive()
         {
@@ -74,6 +75,7 @@ namespace ChatServer.Net
                     string s = In.ReadLine();
                     if (s != null)
                     {
+                        //Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
                         Packet packet = Packet.ToPacket(s);
                         if (packet != null)
                         {
