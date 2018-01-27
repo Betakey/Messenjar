@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
 
 namespace NetDLL
 {
@@ -16,24 +17,14 @@ namespace NetDLL
         /// </summary>
         public static Packet ToPacket(string str)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            MemoryStream ms = new MemoryStream(Encoding.ASCII.GetBytes(str));
-            ms.Position = 0;
-            object obj = bf.Deserialize(ms);
-            ms.Close();
-            return obj as Packet;
+            return JsonConvert.DeserializeObject(str) as Packet;
         }
         /// <summary>
         /// Converts a Packet Object to an ASCII String via Serialization
         /// </summary>
         public override string ToString()
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            MemoryStream ms = new MemoryStream();
-            bf.Serialize(ms, this);
-            string str = Encoding.ASCII.GetString(ms.GetBuffer());
-            ms.Close();
-            return str;
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

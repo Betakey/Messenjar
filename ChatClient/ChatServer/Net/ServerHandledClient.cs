@@ -24,12 +24,14 @@ namespace ChatServer.Net
 
         public Thread Thread { get; private set; }
 
-        private NetworkServer server;
+        private Server server;
 
-        public ServerHandledClient(TcpClient client, NetworkServer server)
+        public ServerHandledClient(TcpClient client, Server server)
         {
             this.server = server;
             Client = client;
+            In = new StreamReader(client.GetStream());
+            Out = new StreamWriter(client.GetStream());
             ID = Guid.NewGuid();
             Thread = new Thread(Receive);
             Thread.Start();
@@ -53,8 +55,9 @@ namespace ChatServer.Net
         /// </summary>
         public void SendPacket(Packet packet)
         {
-            Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
-            Out.WriteLine(Cryptor.Encrypt(ID.ToString(), packet.ToString()));
+            Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType().ToString().Replace("NetDLL.", "").Replace("Packet", "") + ")");
+            //Out.WriteLine(Cryptor.Encrypt(ID.ToString(), packet.ToString()));
+            Out.WriteLine(packet.ToString());
             Out.Flush();
         }
 
@@ -74,7 +77,8 @@ namespace ChatServer.Net
                     string s = In.ReadLine();
                     if (s != null)
                     {
-                        Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
+                        //Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
+                        Packet packet = Packet.ToPacket(s);
                         if (packet != null)
                         {
                             Console.WriteLine("[" + server.Port + "] -> Packet received from " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
