@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NetDLL
 {
     [Serializable]
-    class PacketRequestDisconnect : Packet
+    public class PacketRequestDisconnect : Packet
     {
 
     }
