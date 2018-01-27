@@ -30,6 +30,8 @@ namespace ChatServer.Net
         {
             this.server = server;
             Client = client;
+            In = new StreamReader(client.GetStream());
+            Out = new StreamWriter(client.GetStream());
             ID = Guid.NewGuid();
             Thread = new Thread(Receive);
             Thread.Start();
@@ -53,7 +55,7 @@ namespace ChatServer.Net
         /// </summary>
         public void SendPacket(Packet packet)
         {
-            Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
+            Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType().ToString().Replace("NetDLL.", "").Replace("Packet", "") + ")");
             //Out.WriteLine(Cryptor.Encrypt(ID.ToString(), packet.ToString()));
             Out.WriteLine(packet.ToString());
             Out.Flush();
