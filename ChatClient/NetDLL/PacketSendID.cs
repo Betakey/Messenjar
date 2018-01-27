@@ -9,9 +9,9 @@ namespace NetDLL
     [Serializable]
     public class PacketSendID : Packet
     {
-        public Guid ID { get; private set; }
+        public string ID { get; private set; }
 
-        public PacketSendID(Guid id)
+        public PacketSendID(string id)
         {
             ID = id;
         }

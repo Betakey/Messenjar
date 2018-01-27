@@ -8,12 +8,13 @@ using System.Threading;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using NetDLL;
 
-namespace ChatClient.Net
+namespace ChatClient
 {
     public class Client
     {
-        public Guid ID { get; private set; }
+        public Guid ID { get; set; }
 
         public string Name { get; private set; }
 
@@ -25,13 +26,55 @@ namespace ChatClient.Net
 
         public TcpClient TClient { get; private set; }
 
-        public Client(TcpClient client, ChatClient chatClient)
+        public Client(TcpClient client, ChatClientForm chatClientForm)
         {
             TClient = client;
             Out = new StreamWriter(TClient.GetStream());
             In = new StreamReader(TClient.GetStream());
+            Thread = new Thread(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        string check = null;
+                        while ((check = In.ReadLine()) != null)
+                        {
+                            chatClientForm.PacketHandler(Packet.ToPacket(Encoding.ASCII.GetBytes(check)));
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Verbindung zum Server verloren!", "Fehler!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    chatClientForm.Close();
+                }
+            });
+            Thread.IsBackground = true;
+            Thread.Start();
+        }
+        /// <summary>
+        /// Methode closes every connection and thread.
+        /// </summary>
+        public void Close()
+        {
+            Thread.Abort();
+            In.Close();
+            Out.Close();
+        }
 
+        /// <summary>
+        /// Converts packet to String and sends it.
+        /// </summary>
+        /// <param name="packet"></param>
+        public void Write(Packet packet)
+        {
+            string packetString = packet.ToString();
+            Out.WriteLine(packetString);
+            Out.Flush();
         }
     }
-}
+}      
+
 
