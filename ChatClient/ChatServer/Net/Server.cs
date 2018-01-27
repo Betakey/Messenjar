@@ -93,7 +93,7 @@ namespace ChatServer.Net
             }
             catch
             {
-                // There would be an Exception which is a little bit weird but not important cause its get thrown when the program shuts down
+                // There would be an exception which is a little bit weird but not important because it gets thrown when the program shuts down
             }
         }
 

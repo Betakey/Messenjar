@@ -22,12 +22,12 @@ namespace ChatClient
             TcpClient Tclient = new TcpClient();
             try
             {
-                Tclient.Connect(IPAddress.Loopback.ToString(), 3444);
+                Tclient.Connect(IPAddress.Loopback.ToString(), 12345);
             }
             catch
             {
-                MessageBox.Show("Connection to server failed!");
-                Close();
+               MessageBox.Show("Connection to server failed!");
+               Close();
             }
             client = new Client(Tclient, this);
             InitializeComponent();
@@ -73,14 +73,6 @@ namespace ChatClient
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            if(sendTextRichTextBox.Text.StartsWith("@"))
-            {
-                string receiver = sendTextRichTextBox.Text.Split(' ')[0].Substring(1);
-                string text = sendTextRichTextBox.Text.Replace("@" + receiver + " ", "");
-                client.Write(new PacketSendUniText(receiver, text));
-                sendTextRichTextBox.Clear();
-            }
-            else
             {
                 client.Write(new PacketSendText(chatRichTextBox.Text, userNameTextBox.Text));
                 sendTextRichTextBox.Clear();
@@ -94,28 +86,17 @@ namespace ChatClient
         {
             if (packet is PacketSendID)
             {
-                client.ID = Guid.Parse((packet as PacketSendID).ID);
+                client.ID = (packet as PacketSendID).ID;
             }
             else if (packet is PacketSendText)
             {
                 if (!string.IsNullOrEmpty(chatRichTextBox.Text))
-                    chatRichTextBox.Text += "\n" + (packet as PacketSendText).Sender +
+                    chatRichTextBox.Text += "\n" + (packet as PacketSendText).Receiver +
                         ": " + (packet as PacketSendText).Text;
                 else
-                    chatRichTextBox.Text += (packet as PacketSendText).Sender +
+                    chatRichTextBox.Text += (packet as PacketSendText).Receiver +
                         ": " + (packet as PacketSendText).Text;
             }
-            else if (packet is PacketSendDisconnect)
-            {
-                Close();
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Disconnect()
-        {
-            client.Write(new PacketRequestDisconnect());
         }
     }
 }

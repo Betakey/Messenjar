@@ -40,13 +40,13 @@ namespace ChatClient
                         string check = null;
                         while ((check = In.ReadLine()) != null)
                         {
-                            chatClientForm.PacketHandler(Packet.ToPacket(Encoding.ASCII.GetBytes(check)));
+                            chatClientForm.PacketHandler(Packet.ToPacket(check));
                         }
                     }
                 }
                 catch
                 {
-                    MessageBox.Show("Verbindung zum Server verloren!", "Fehler!",
+                    MessageBox.Show("Connection lost!", " Failed to connect",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                     chatClientForm.Close();
                 }
@@ -70,8 +70,8 @@ namespace ChatClient
         /// <param name="packet"></param>
         public void Write(Packet packet)
         {
-            string packetString = packet.ToString();
-            Out.WriteLine(packetString);
+            
+            Out.WriteLine(packet.ToString());
             Out.Flush();
         }
     }
