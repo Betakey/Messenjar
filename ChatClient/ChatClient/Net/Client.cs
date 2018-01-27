@@ -40,7 +40,7 @@ namespace ChatClient
                         string check = null;
                         while ((check = In.ReadLine()) != null)
                         {
-                            chatClientForm.PacketHandler(Packet.ToPacket(Encoding.ASCII.GetBytes(check)));
+                            chatClientForm.PacketHandler(Packet.ToPacket(check));
                         }
                     }
                 }
