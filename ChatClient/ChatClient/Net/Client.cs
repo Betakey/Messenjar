@@ -40,15 +40,16 @@ namespace ChatClient
                         string check = null;
                         while ((check = In.ReadLine()) != null)
                         {
-                            chatClientForm.PacketHandler(Packet.ToPacket(check));
+                            chatClientForm.PacketHandler(Packet.ToPacket(Encoding.ASCII.GetBytes(check)));
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Connection lost!", " Failed to connect",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    chatClientForm.Close();
+                    throw ex;
+                    //MessageBox.Show("Connection lost!", " Failed to connect",
+                    //MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //chatClientForm.Close();
                 }
             });
             Thread.IsBackground = true;
@@ -70,7 +71,6 @@ namespace ChatClient
         /// <param name="packet"></param>
         public void Write(Packet packet)
         {
-            
             Out.WriteLine(packet.ToString());
             Out.Flush();
         }

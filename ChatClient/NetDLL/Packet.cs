@@ -14,11 +14,11 @@ namespace NetDLL
         /// <summary>
         /// Converts an ASCII String to a Packet Object via Deserialization
         /// </summary>
-        public static Packet ToPacket(string str)
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            MemoryStream ms = new MemoryStream(Encoding.ASCII.GetBytes(str));
+        public static Packet ToPacket(byte[] bytes)
+        { 
+            MemoryStream ms = new MemoryStream(bytes);
             ms.Position = 0;
+            BinaryFormatter bf = new BinaryFormatter();
             object obj = bf.Deserialize(ms);
             ms.Close();
             return obj as Packet;

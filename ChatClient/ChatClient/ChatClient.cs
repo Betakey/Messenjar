@@ -22,7 +22,7 @@ namespace ChatClient
             TcpClient Tclient = new TcpClient();
             try
             {
-                Tclient.Connect(IPAddress.Loopback.ToString(), 12345);
+                Tclient.Connect(IPAddress.Parse("91.37.182.37"), 2016);
             }
             catch
             {
