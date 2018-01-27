@@ -78,7 +78,7 @@ namespace ChatServer.Net
                     if (s != null)
                     {
                         //Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
-                        Packet packet = Packet.ToPacket(s);
+                        object packet = Packet.ToPacket(s);
                         if (packet != null)
                         {
                             Console.WriteLine("[" + server.Port + "] -> Packet received from " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");

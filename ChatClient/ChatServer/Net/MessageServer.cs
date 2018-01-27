@@ -15,7 +15,7 @@ namespace ChatServer.Net
         {
         }
 
-        public override void OnPacketReceived(ServerHandledClient client, Packet packet)
+        public override void OnPacketReceived(ServerHandledClient client, object packet)
         {
             if (packet is PacketSendText)
             {

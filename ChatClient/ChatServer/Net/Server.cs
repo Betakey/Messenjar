@@ -113,7 +113,7 @@ namespace ChatServer.Net
         /// The Event which get called when a Packet comes in from a Client
         /// The Event is then handling the incoming Packets
         /// </summary>
-        public abstract void OnPacketReceived(ServerHandledClient client, Packet packet);
+        public abstract void OnPacketReceived(ServerHandledClient client, object packet);
 
         /// <summary>
         /// The Event which get called when a Connection to a Client breaks
