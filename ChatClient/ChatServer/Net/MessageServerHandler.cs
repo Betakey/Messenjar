@@ -8,15 +8,15 @@ using NetDLL.Utils;
 
 namespace ChatServer.Net
 {
-    public class BackUpServerHandler
+    public class MessageServerHandler
     {
-        public List<NetworkServer> BackUpServers { get; private set; }
+        public List<MessageServer> MessageServers { get; private set; }
 
         private int port;
         private List<int> exceptionPorts;
         private string ip;
 
-        public BackUpServerHandler()
+        public MessageServerHandler()
         {
             try
             {
@@ -33,7 +33,7 @@ namespace ChatServer.Net
             {
                 ip = "127.0.0.1";
             }
-            BackUpServers = new List<NetworkServer>();
+            MessageServers = new List<MessageServer>();
             port = Program.Instance.Config.AsInt(ConfigKey.PortRangeMin);
             exceptionPorts = new List<int>();
             foreach (string s in Program.Instance.Config.AsString(ConfigKey.ExceptionPorts).Split(','))
@@ -45,9 +45,9 @@ namespace ChatServer.Net
         public void StartNewServer()
         {
             int port = GeneratePort();
-            NetworkServer server = new NetworkServer(ip, port);
+            MessageServer server = new MessageServer(ip, port);
             server.Start();
-            BackUpServers.Add(server);
+            MessageServers.Add(server);
         }
 
         public int GeneratePort()
@@ -64,7 +64,7 @@ namespace ChatServer.Net
         {
             try
             {
-                BackUpServers.Find(x => x.Port == port);
+                MessageServers.Find(x => x.Port == port);
                 return true;
             }
             catch
@@ -75,7 +75,7 @@ namespace ChatServer.Net
 
         public ServerHandledClient GetClient(string name)
         {
-            foreach (NetworkServer server in BackUpServers)
+            foreach (Server server in MessageServers)
             {
                 ServerHandledClient client = server.GetClient(name);
                 if (client != null) return client;

@@ -24,7 +24,7 @@ namespace ChatServer
 
         public UserDataManager UserDataManager { get; private set; }
 
-        public BackUpServerHandler BackUpServerHandler { get; private set; }
+        public MessageServerHandler MessageServerHandler { get; private set; }
 
         public Program()
         {
@@ -80,7 +80,7 @@ namespace ChatServer
             Console.WriteLine("<> Loading User Data...");
             UserDataManager = new UserDataManager();
             Console.WriteLine("<> User Data loaded!");
-            BackUpServerHandler = new BackUpServerHandler();
+            MessageServerHandler = new MessageServerHandler();
         }
 
         private void Init()
@@ -94,7 +94,7 @@ namespace ChatServer
             {
                 ip = NetUtils.GetExternalIPAddress().ToString();
             }
-            NetworkServer = new NetworkServer(ip, 34563);
+            NetworkServer = new NetworkServer(ip);
             NetworkServer.Start();
         }
 

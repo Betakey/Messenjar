@@ -24,9 +24,9 @@ namespace ChatServer.Net
 
         public Thread Thread { get; private set; }
 
-        private NetworkServer server;
+        private Server server;
 
-        public ServerHandledClient(TcpClient client, NetworkServer server)
+        public ServerHandledClient(TcpClient client, Server server)
         {
             this.server = server;
             Client = client;
@@ -54,7 +54,8 @@ namespace ChatServer.Net
         public void SendPacket(Packet packet)
         {
             Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
-            Out.WriteLine(Cryptor.Encrypt(ID.ToString(), packet.ToString()));
+            //Out.WriteLine(Cryptor.Encrypt(ID.ToString(), packet.ToString()));
+            Out.WriteLine(packet.ToString());
             Out.Flush();
         }
 
@@ -74,7 +75,8 @@ namespace ChatServer.Net
                     string s = In.ReadLine();
                     if (s != null)
                     {
-                        Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
+                        //Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
+                        Packet packet = Packet.ToPacket(s);
                         if (packet != null)
                         {
                             Console.WriteLine("[" + server.Port + "] -> Packet received from " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");

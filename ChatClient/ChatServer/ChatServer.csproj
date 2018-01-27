@@ -49,8 +49,10 @@
     <Compile Include="IO\ConfigKey.cs" />
     <Compile Include="IO\UserData.cs" />
     <Compile Include="IO\UserDataManager.cs" />
-    <Compile Include="Net\BackUpServerHandler.cs" />
+    <Compile Include="Net\MessageServerHandler.cs" />
+    <Compile Include="Net\MessageServer.cs" />
     <Compile Include="Net\NetworkServer.cs" />
+    <Compile Include="Net\Server.cs" />
     <Compile Include="Net\ServerHandledClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
