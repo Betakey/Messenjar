@@ -9,7 +9,7 @@ namespace ChatServer.Net
 {
     public class NetworkServer : Server
     {
-        public NetworkServer(string ip) : base(ip, 34563)
+        public NetworkServer(string ip) : base(ip, 2016)
         {
         }
 
