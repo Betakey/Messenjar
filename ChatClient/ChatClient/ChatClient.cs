@@ -82,7 +82,7 @@ namespace ChatClient
         /// Checks the type of a Packet.
         /// </summary>
         /// <param name="packet"></param>
-        public void PacketHandler(Packet packet)
+        public void PacketHandler(object packet)
         {
             if (packet is PacketSendID)
             {

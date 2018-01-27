@@ -15,9 +15,9 @@ namespace NetDLL
         /// <summary>
         /// Converts an ASCII String to a Packet Object via Deserialization
         /// </summary>
-        public static Packet ToPacket(string str)
+        public static object ToPacket(string str)
         {
-            return JsonConvert.DeserializeObject(str) as Packet;
+            return JsonConvert.DeserializeObject(str);
         }
         /// <summary>
         /// Converts a Packet Object to an ASCII String via Serialization

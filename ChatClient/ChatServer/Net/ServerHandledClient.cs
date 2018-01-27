@@ -78,7 +78,7 @@ namespace ChatServer.Net
                     if (s != null)
                     {
                         //Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
-                        Packet packet = Packet.ToPacket(s);
+                        object packet = Packet.ToPacket(s);
                         if (packet != null)
                         {
                             Console.WriteLine("[" + server.Port + "] -> Packet received from " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
@@ -89,8 +89,8 @@ namespace ChatServer.Net
             }
             catch
             {
-                Console.WriteLine("[" + server.Port + "] <> Client (IP: " + Client.Client.LocalEndPoint + ") disconnected");
                 server.OnClientDisconnect(this);
+                Console.WriteLine("[" + server.Port + "] <> Client (IP: " + Client.Client.LocalEndPoint + ") disconnected");
                 Close();
             }
         }
