@@ -74,7 +74,7 @@ namespace ChatClient
         private void sendButton_Click(object sender, EventArgs e)
         {
             {
-                client.Write(new PacketSendText(chatRichTextBox.Text, userNameTextBox.Text));
+                client.Write(new PacketSendText(sendTextRichTextBox.Text, userNameTextBox.Text));
                 sendTextRichTextBox.Clear();
             }
         }

@@ -44,11 +44,12 @@ namespace ChatClient
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Connection lost!", " Failed to connect",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    chatClientForm.Close();
+                    throw ex;
+                    //MessageBox.Show("Connection lost!", " Failed to connect",
+                    //MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //chatClientForm.Close();
                 }
             });
             Thread.IsBackground = true;
@@ -70,7 +71,6 @@ namespace ChatClient
         /// <param name="packet"></param>
         public void Write(Packet packet)
         {
-            
             Out.WriteLine(packet.ToString());
             Out.Flush();
         }
