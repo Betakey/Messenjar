@@ -57,8 +57,9 @@ namespace ChatServer.Net
         {
             Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType().ToString().Replace("NetDLL.", "").Replace("Packet", "") + ")");
             //Out.WriteLine(Cryptor.Encrypt(ID.ToString(), packet.ToString()));
-            Out.WriteLine(packet.ToString());
-            Out.Flush();
+            byte[] bytes = packet.ToBytes();
+            Client.GetStream().Write(BitConverter.GetBytes(bytes.Length), 0, BitConverter.GetBytes(bytes.Length).Length);
+            Client.GetStream().Write(bytes, 0, bytes.Length);
         }
 
         /// <summary>
@@ -74,14 +75,24 @@ namespace ChatServer.Net
             {
                 while (true)
                 {
-                    string s = In.ReadLine();
-                    if (s != null)
+                    int bytesRead = 0;
+                    int bufferSize = 0;
+                    byte[] datalength = new byte[4];
+                    Client.GetStream().Read(datalength, 0, datalength.Length);
+                    bufferSize = BitConverter.ToInt32(datalength, 0);
+
+                    if (bufferSize != 0)
                     {
-                        //Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
-                        object packet = Packet.ToPacket(s);
+                        byte[] bytes = new byte[bufferSize];
+                        bytesRead = Client.GetStream().Read(bytes, 0, bufferSize);
+                        if (bytesRead == 0)
+                        {
+                            break;
+                        }
+                        Packet packet = Packet.ToPacket(bytes);
                         if (packet != null)
                         {
-                            Console.WriteLine("[" + server.Port + "] -> Packet received from " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
+                            Console.WriteLine("[" + server.Port + "] -> Packet received from " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType().ToString().Replace("NetDLL.", "").Replace("Packet", "") + ")");
                             server.OnPacketReceived(this, packet);
                         }
                     }
