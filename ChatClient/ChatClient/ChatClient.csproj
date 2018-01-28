@@ -89,6 +89,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NetDLL\NetDLL.csproj">
+      <Project>{c19e4f8a-8bd8-4303-aaa2-0ece53f7450d}</Project>
+      <Name>NetDLL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\GuiDLL\GuiDLL.csproj">
       <Project>{76F4A204-D516-423D-A70E-38D89930999A}</Project>
       <Name>GuiDLL</Name>

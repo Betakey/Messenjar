@@ -1,6 +1,6 @@
 ﻿namespace ChatClient
 {
-    partial class ChatClient
+    partial class ChatClientForm
     {
         /// <summary>
         /// Erforderliche Designervariable.
@@ -30,7 +30,7 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.sendTextRichTextBox = new System.Windows.Forms.RichTextBox();
-            this.chatRichTexbox = new System.Windows.Forms.RichTextBox();
+            this.chatRichTextBox = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.sendButton = new System.Windows.Forms.Button();
             this.friendsListbox = new System.Windows.Forms.ListBox();
@@ -56,17 +56,17 @@
             this.sendTextRichTextBox.TabIndex = 2;
             this.sendTextRichTextBox.Text = "";
             // 
-            // chatRichTexbox
+            // chatRichTextBox
             // 
-            this.chatRichTexbox.BackColor = System.Drawing.Color.Chartreuse;
-            this.chatRichTexbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.chatRichTexbox.Cursor = System.Windows.Forms.Cursors.Default;
-            this.chatRichTexbox.Location = new System.Drawing.Point(12, 25);
-            this.chatRichTexbox.Name = "chatRichTexbox";
-            this.chatRichTexbox.ReadOnly = true;
-            this.chatRichTexbox.Size = new System.Drawing.Size(220, 239);
-            this.chatRichTexbox.TabIndex = 3;
-            this.chatRichTexbox.Text = "";
+            this.chatRichTextBox.BackColor = System.Drawing.Color.Chartreuse;
+            this.chatRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.chatRichTextBox.Cursor = System.Windows.Forms.Cursors.Default;
+            this.chatRichTextBox.Location = new System.Drawing.Point(12, 25);
+            this.chatRichTextBox.Name = "chatRichTextBox";
+            this.chatRichTextBox.ReadOnly = true;
+            this.chatRichTextBox.Size = new System.Drawing.Size(220, 239);
+            this.chatRichTextBox.TabIndex = 3;
+            this.chatRichTextBox.Text = "";
             // 
             // label2
             // 
@@ -87,6 +87,7 @@
             this.sendButton.TabIndex = 5;
             this.sendButton.Text = "Send";
             this.sendButton.UseVisualStyleBackColor = false;
+            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             // 
             // friendsListbox
             // 
@@ -121,7 +122,7 @@
             this.closeButton.UseVisualStyleBackColor = false;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
-            // ChatClient
+            // ChatClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -132,12 +133,12 @@
             this.Controls.Add(this.friendsListbox);
             this.Controls.Add(this.sendButton);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.chatRichTexbox);
+            this.Controls.Add(this.chatRichTextBox);
             this.Controls.Add(this.sendTextRichTextBox);
             this.Controls.Add(this.label1);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "ChatClient";
+            this.Name = "ChatClientForm";
             this.Text = "ChatClient";
             this.Load += new System.EventHandler(this.ChatClient_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChatClient_KeyDown);
@@ -151,7 +152,7 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox sendTextRichTextBox;
-        private System.Windows.Forms.RichTextBox chatRichTexbox;
+        private System.Windows.Forms.RichTextBox chatRichTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button sendButton;
         private System.Windows.Forms.ListBox friendsListbox;
