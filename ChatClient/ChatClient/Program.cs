@@ -16,7 +16,7 @@ namespace ChatClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ChatClient());
+            Application.Run(new TestForm());
         }
     }
 }
