@@ -13,7 +13,7 @@ namespace ChatServer.Net
         {
         }
 
-        public override void OnPacketReceived(ServerHandledClient client, object packet)
+        public override void OnPacketReceived(ServerHandledClient client, Packet packet)
         {
             
         }

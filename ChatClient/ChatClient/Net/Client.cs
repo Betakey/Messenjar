@@ -37,10 +37,23 @@ namespace ChatClient
                 {
                     while (true)
                     {
-                        string check = null;
-                        while ((check = In.ReadLine()) != null)
+                        int bytesRead = 0;
+                        int bufferSize = 0;
+                        byte[] datalength = new byte[4];
+                        TClient.GetStream().Read(datalength, 0, datalength.Length);
+                        bufferSize = BitConverter.ToInt32(datalength, 0);
+
+                        if (bufferSize != 0)
                         {
-                            chatClientForm.PacketHandler(Packet.ToPacket(check));
+                            byte[] bytes = new byte[bufferSize];
+                            bytesRead = TClient.GetStream().Read(bytes, 0, bufferSize);
+                            if (bytesRead == 0)
+                            {
+                                break;
+                            }
+                            Packet packet = Packet.ToPacket(bytes);
+                            if (packet != null)
+                                chatClientForm.PacketHandler(packet);
                         }
                     }
                 }
@@ -71,8 +84,9 @@ namespace ChatClient
         /// <param name="packet"></param>
         public void Write(Packet packet)
         {
-            Out.WriteLine(packet.ToString());
-            Out.Flush();
+            byte[] bytes = packet.ToBytes();
+            TClient.GetStream().Write(BitConverter.GetBytes(bytes.Length), 0, BitConverter.GetBytes(bytes.Length).Length);
+            TClient.GetStream().Write(bytes, 0, bytes.Length);
         }
     }
 }      

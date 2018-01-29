@@ -13,18 +13,29 @@ namespace NetDLL
     public abstract class Packet
     {
         /// <summary>
-        /// Converts an ASCII String to a Packet Object via Deserialization
+        /// Converts a Byte Array to a Packet Object via Deserialization
         /// </summary>
-        public static object ToPacket(string str)
+        public static Packet ToPacket(byte[] bytes)
         {
-            return JsonConvert.DeserializeObject(str);
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream(bytes);
+            stream.Position = 0;
+            object rval = formatter.Deserialize(stream);
+            stream.Close();
+            return rval as Packet;
         }
+
         /// <summary>
-        /// Converts a Packet Object to an ASCII String via Serialization
+        /// Converts a Packet Object to a Byte Array via Serialization
         /// </summary>
-        public override string ToString()
+        public byte[] ToBytes()
         {
-            return JsonConvert.SerializeObject(this);
+            MemoryStream fs = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(fs, this);
+            byte[] rval = fs.ToArray();
+            fs.Close();
+            return rval;
         }
     }
 }
