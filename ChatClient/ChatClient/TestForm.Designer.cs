@@ -34,6 +34,7 @@
             // 
             // chatBox1
             // 
+            this.chatBox1.BackColor = System.Drawing.Color.White;
             this.chatBox1.BackgroundColor = System.Drawing.Color.Empty;
             this.chatBox1.DateBoxColor = System.Drawing.Color.Empty;
             this.chatBox1.ForegroundColor = System.Drawing.Color.Black;
