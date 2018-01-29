@@ -60,7 +60,6 @@
             // 
             this.chatRichTextBox.BackColor = System.Drawing.Color.Chartreuse;
             this.chatRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.chatRichTextBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.chatRichTextBox.Location = new System.Drawing.Point(12, 25);
             this.chatRichTextBox.Name = "chatRichTextBox";
             this.chatRichTextBox.ReadOnly = true;
