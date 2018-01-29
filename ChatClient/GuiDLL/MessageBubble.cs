@@ -21,6 +21,7 @@ namespace GuiDLL
         private bool timeVisible;
         private Font font;
         private Graphics graphics;
+        private int timeHeight, timeWidth;
 
         public MessageBubble(Color color, Color foreColor, Font font, string text, DateTime time, int maxWidth, bool timeVisible = true, int edge = 50)
         {
@@ -33,7 +34,9 @@ namespace GuiDLL
             this.font = font;
             this.time = time;
             this.maxWidth = maxWidth;
-            graphics = CreateGraphics();  
+            graphics = CreateGraphics();
+            timeHeight = TextRenderer.MeasureText(time.ToString("HH:mm"), font).Height;
+            timeWidth = TextRenderer.MeasureText(time.ToString("HH:mm"), font).Width;
             GenerateSize(text);
         }
 
@@ -42,18 +45,28 @@ namespace GuiDLL
             SizeF textSize = graphics.MeasureString(input, font, maxWidth);
             if (textSize.Width + 20 < maxWidth)
             {
-                Size = new Size((int)Math.Round(textSize.Width) + 20, (int)Math.Round(textSize.Height) + 20);
+                Size = new Size((int)Math.Round(textSize.Width) + 20, (int)Math.Round(textSize.Height) + 20 + (timeVisible ? timeHeight : 0));
             }
             else
             {
-                Size = new Size(maxWidth, (int)Math.Round(textSize.Height) + 20);
+                Size = new Size(maxWidth, (int)Math.Round(textSize.Height) + 20 + (timeVisible ? timeHeight : 0));
             }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            e.Graphics.DrawString(text, font, brush, new Rectangle(10, 10, Size.Width, Size.Height));
+            e.Graphics.DrawString(text, font, brush, new Rectangle(10, 10, Size.Width, Size.Height - (timeVisible ? timeHeight : 0)));
+            if (timeVisible)
+            {
+                if (Size.Width > timeWidth + 10)
+                    e.Graphics.DrawString(time.ToString("HH:mm"), font, brush, Size.Width - timeWidth - 5,
+                        Size.Height - timeHeight - 5);
+                else
+                    e.Graphics.DrawString(time.ToString("HH:mm"), font, brush, Size.Width - timeWidth + 2,
+                        Size.Height - timeHeight - 5);
+            }
+
         }
     }
 }

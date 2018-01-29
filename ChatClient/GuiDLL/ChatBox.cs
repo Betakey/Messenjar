@@ -47,7 +47,7 @@ namespace GuiDLL
                 y += 10 + timeBubble.Height;
                 foreach (ChatBoxEntry entry in content[time])
                 {
-                    MessageBubble msgBubble = new MessageBubble(entry.Sender.ToLower().Equals(yourName.ToLower()) ? Color.Chartreuse : Color.CornflowerBlue, Color.Black, Font, entry.Message, time, (Width / 3) * 2, false);
+                    MessageBubble msgBubble = new MessageBubble(entry.Sender.ToLower().Equals(yourName.ToLower()) ? Color.Chartreuse : Color.CornflowerBlue, Color.Black, Font, entry.Message, time, (Width / 3) * 2);
                     msgBubble.Location = new Point(entry.Sender.ToLower().Equals(yourName.ToLower()) ? 10 : Width - 10 - msgBubble.Width, y);
                     msgBubble.Visible = true;
                     Controls.Add(msgBubble);
