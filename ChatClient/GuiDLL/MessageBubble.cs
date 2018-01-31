@@ -49,14 +49,14 @@ namespace GuiDLL
             }
             else
             {
-                Size = new Size(maxWidth, (int)Math.Round(textSize.Height) + 20 + (timeVisible ? timeHeight : 0));
+                Size = new Size(maxWidth - 10, (int)Math.Round(textSize.Height) + 20 + (timeVisible ? timeHeight : 0));
             }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            e.Graphics.DrawString(text, font, brush, new Rectangle(10, 10, Size.Width, Size.Height - (timeVisible ? timeHeight : 0)));
+            e.Graphics.DrawString(text, font, brush, new Rectangle(10, 10, Size.Width - 10, Size.Height - (timeVisible ? timeHeight : 0)));
             if (timeVisible)
             {
                 if (Size.Width > timeWidth + 10)
