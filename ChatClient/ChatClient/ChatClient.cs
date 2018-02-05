@@ -73,7 +73,14 @@ namespace ChatClient
                     }
                     convertedDict.Add(time, entries);
                 }
-                chatBox.AddChatMessage(convertedDict, name); 
+                if (chatBox.InvokeRequired)
+                {
+                    MethodInvoker invoker = delegate
+                    {
+                        chatBox.AddChatMessage(convertedDict, name);
+                    };
+                    chatBox.Invoke(invoker);
+                } 
             }
         }
     }

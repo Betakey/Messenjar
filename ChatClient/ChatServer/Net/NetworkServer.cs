@@ -26,6 +26,10 @@ namespace ChatServer.Net
                 ServerHandledClient receiver = GetClient(((PacketSendText)packet).Receiver);
                 if (receiver != null) receiver.SendPacket(new PacketSendHistory(dict));
             }
+            else if (packet is PacketSendName)
+            {
+                client.Name = ((PacketSendName) packet).Name;
+            }
         }
     }
 }

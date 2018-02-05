@@ -48,6 +48,7 @@
     <Compile Include="PacketRequestMessageServer.cs" />
     <Compile Include="PacketSendHistory.cs" />
     <Compile Include="PacketSendID.cs" />
+    <Compile Include="PacketSendName.cs" />
     <Compile Include="PacketSendNewMessageNotify.cs" />
     <Compile Include="PacketSendText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

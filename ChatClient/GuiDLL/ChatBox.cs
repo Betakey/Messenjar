@@ -36,22 +36,6 @@ namespace GuiDLL
             history = new Dictionary<DateTime, List<ChatBoxEntry>>();
         }
 
-        public void AddSavedChatMessage(Dictionary<DateTime, List<ChatBoxEntry>> contentNotOrdered, string yourName)
-        {
-            if (InvokeRequired)
-            {
-                MethodInvoker invoker = delegate
-                {
-                    AddChatMessage(contentNotOrdered, yourName);
-                };
-                Invoke(invoker);
-            }
-            else
-            {
-                AddChatMessage(contentNotOrdered, yourName);
-            }
-        }
-
         public void AddChatMessage(Dictionary<DateTime, List<ChatBoxEntry>> contentNotOrdered, string yourName)
         {
             Dictionary<DateTime, List<ChatBoxEntry>> content = new Dictionary<DateTime, List<ChatBoxEntry>>();
