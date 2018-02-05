@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace NetDLL
 {
     [Serializable]
-    public class PacketRequestConnection : Packet
+    public class PacketSendName : Packet
     {
-        public int Port { get; private set; }
+        public string Name { get; private set; }
 
-        public PacketRequestConnection(int port)
+        public PacketSendName(string name)
         {
-            Port = port;
+            Name = name;
         }
     }
 }
