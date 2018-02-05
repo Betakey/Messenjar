@@ -10,6 +10,9 @@ namespace ChatServer.Net
 {
     public class MessageServerHandler
     {
+        /// <summary>
+        /// Every started Message Server
+        /// </summary>
         public List<MessageServer> MessageServers { get; private set; }
 
         private int port;
@@ -42,6 +45,23 @@ namespace ChatServer.Net
             }
         }
 
+        /// <summary>
+        /// Shuts down all acitve Message Servers
+        /// </summary>
+        public void Shutdown()
+        {
+            foreach (MessageServer server in MessageServers)
+            {
+                server.Stop();
+            }
+        }
+
+        /// <summary>
+        /// Starts a new Message Server:
+        /// - Generates a Port which is free
+        /// - Starts the Server
+        /// - Adds the Server to the handling List
+        /// </summary>
         public void StartNewServer()
         {
             int port = GeneratePort();
@@ -50,6 +70,9 @@ namespace ChatServer.Net
             MessageServers.Add(server);
         }
 
+        /// <summary>
+        /// Generates a Port which can be used and is free
+        /// </summary>
         public int GeneratePort()
         {
             port++;
@@ -60,6 +83,9 @@ namespace ChatServer.Net
             return port;
         }
 
+        /// <summary>
+        /// Checks if there is another Message Server with the given Port
+        /// </summary>
         private bool IsPortInUse(int port)
         {
             try
@@ -73,6 +99,10 @@ namespace ChatServer.Net
             }
         }
 
+        /// <summary>
+        /// Returns the ServerHandledClient object to the given Name when the Client is on one of the Message Servers.
+        /// If not it returns null
+        /// </summary>
         public ServerHandledClient GetClient(string name)
         {
             foreach (Server server in MessageServers)
