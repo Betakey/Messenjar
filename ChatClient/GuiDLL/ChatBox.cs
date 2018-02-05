@@ -41,7 +41,7 @@ namespace GuiDLL
             Dictionary<DateTime, List<ChatBoxEntry>> content = new Dictionary<DateTime, List<ChatBoxEntry>>();
             foreach (DateTime time in contentNotOrdered.Keys.OrderByDescending(d => d))
             {
-                content.Add(time, history[time]);
+                content.Add(time, contentNotOrdered[time]);
             }
             foreach (DateTime time in content.Keys)
             {
