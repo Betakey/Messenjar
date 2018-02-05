@@ -59,6 +59,7 @@ namespace ChatClient
             if (packet is PacketSendID)
             {
                 client.ID = (packet as PacketSendID).ID;
+                client.Write(new PacketSendName(client.Name));
             }
             else if (packet is PacketSendHistory)
             {
