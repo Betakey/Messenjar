@@ -18,7 +18,7 @@ namespace ChatClient
     public partial class ChatClientForm : Form
     {
         private Client client;
-        private string name = "Receiver2"; 
+        private string name = "Receiver1"; 
 
         public ChatClientForm()
         {
@@ -46,7 +46,7 @@ namespace ChatClient
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            client.Write(new PacketSendText(inputRichTextbox.Text, "Receiver1"));
+            client.Write(new PacketSendText(inputRichTextbox.Text, "Receiver2"));
             inputRichTextbox.Clear();
         }
 

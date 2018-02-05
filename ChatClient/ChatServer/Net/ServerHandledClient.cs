@@ -98,7 +98,7 @@ namespace ChatServer.Net
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 server.OnClientDisconnect(this);
                 Console.WriteLine("[" + server.Port + "] <> Client (IP: " + Client.Client.LocalEndPoint + ") disconnected");

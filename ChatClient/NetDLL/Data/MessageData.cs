@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetDLL.Data
 {
+    [Serializable]
     public class MessageData
     {
         public string Message { get; private set; }
