@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +51,8 @@
     <Compile Include="ChatClient.Designer.cs">
       <DependentUpon>ChatClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="IO\Config.cs" />
+    <Compile Include="IO\ConfigKey.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +85,12 @@
     <ProjectReference Include="..\NetDLL\NetDLL.csproj">
       <Project>{c19e4f8a-8bd8-4303-aaa2-0ece53f7450d}</Project>
       <Name>NetDLL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GuiDLL\GuiDLL.csproj">
+      <Project>{76F4A204-D516-423D-A70E-38D89930999A}</Project>
+      <Name>GuiDLL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -87,7 +87,7 @@ namespace ChatServer.Net
                         bytesRead = Client.GetStream().Read(bytes, 0, bufferSize);
                         if (bytesRead == 0)
                         {
-                            break;
+                            continue;
                         }
                         Packet packet = Packet.ToPacket(bytes);
                         if (packet != null)
@@ -98,7 +98,7 @@ namespace ChatServer.Net
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 server.OnClientDisconnect(this);
                 Console.WriteLine("[" + server.Port + "] <> Client (IP: " + Client.Client.LocalEndPoint + ") disconnected");
