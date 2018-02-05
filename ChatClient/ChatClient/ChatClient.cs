@@ -10,19 +10,22 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using NetDLL;
+using GuiDLL;
+using NetDLL.Data;
 
 namespace ChatClient
 {
     public partial class ChatClientForm : Form
     {
         private Client client;
+        private string name = "Receiver2"; 
 
         public ChatClientForm()
         {
             TcpClient Tclient = new TcpClient();
             try
             {
-                Tclient.Connect("91.37.182.37", 2016);
+                Tclient.Connect(Program.Config.AsString(IO.ConfigKey.ServerIP), 34563);
             }
             catch
             {
@@ -34,36 +37,6 @@ namespace ChatClient
             sendButton.TabStop = false;
             sendButton.FlatStyle = FlatStyle.Flat;
             sendButton.FlatAppearance.BorderSize = 0;
-            closeButton.TabStop = false;
-            closeButton.FlatStyle = FlatStyle.Flat;
-            closeButton.FlatAppearance.BorderSize = 0;
-        }
-
-        private void ChatClient_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
-
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
-
-        private void ChatClient_KeyDown(object sender, KeyEventArgs e)
-        {
-            
-        }
-
-        private void ChatClient_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-            }
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -73,11 +46,10 @@ namespace ChatClient
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            {
-                client.Write(new PacketSendText(sendTextRichTextBox.Text, userNameTextBox.Text));
-                sendTextRichTextBox.Clear();
-            }
+            client.Write(new PacketSendText(inputRichTextbox.Text, "Receiver1"));
+            inputRichTextbox.Clear();
         }
+
         /// <summary>
         /// Checks the type of a Packet.
         /// </summary>
@@ -88,14 +60,20 @@ namespace ChatClient
             {
                 client.ID = (packet as PacketSendID).ID;
             }
-            else if (packet is PacketSendText)
+            else if (packet is PacketSendHistory)
             {
-                if (!string.IsNullOrEmpty(chatRichTextBox.Text))
-                    chatRichTextBox.Text += "\n" + (packet as PacketSendText).Receiver +
-                        ": " + (packet as PacketSendText).Text;
-                else
-                    chatRichTextBox.Text += (packet as PacketSendText).Receiver +
-                        ": " + (packet as PacketSendText).Text;
+                Dictionary<DateTime, List<MessageData>> dict = ((PacketSendHistory)packet).History;
+                Dictionary<DateTime, List<ChatBoxEntry>> convertedDict = new Dictionary<DateTime, List<ChatBoxEntry>>();
+                foreach (DateTime time in dict.Keys)
+                {
+                    List<ChatBoxEntry> entries = new List<ChatBoxEntry>();
+                    foreach (MessageData data in dict[time])
+                    {
+                        entries.Add(new ChatBoxEntry(data.FriendName, data.Message, data.Time));
+                    }
+                    convertedDict.Add(time, entries);
+                }
+                chatBox.AddChatMessage(convertedDict, name); 
             }
         }
     }
