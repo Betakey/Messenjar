@@ -10,12 +10,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using NetDLL;
+using GuiDLL;
+using NetDLL.Data;
 
 namespace ChatClient
 {
     public partial class ChatClientForm : Form
     {
         private Client client;
+        private string name = "Receiver2"; 
 
         public ChatClientForm()
         {
@@ -57,7 +60,21 @@ namespace ChatClient
             {
                 client.ID = (packet as PacketSendID).ID;
             }
-
+            else if (packet is PacketSendHistory)
+            {
+                Dictionary<DateTime, List<MessageData>> dict = ((PacketSendHistory)packet).History;
+                Dictionary<DateTime, List<ChatBoxEntry>> convertedDict = new Dictionary<DateTime, List<ChatBoxEntry>>();
+                foreach (DateTime time in dict.Keys)
+                {
+                    List<ChatBoxEntry> entries = new List<ChatBoxEntry>();
+                    foreach (MessageData data in dict[time])
+                    {
+                        entries.Add(new ChatBoxEntry(data.FriendName, data.Message, data.Time));
+                    }
+                    convertedDict.Add(time, entries);
+                }
+                chatBox.AddChatMessage(convertedDict, name); 
+            }
         }
     }
 }
