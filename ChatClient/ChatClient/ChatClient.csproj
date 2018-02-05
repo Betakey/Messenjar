@@ -51,6 +51,8 @@
     <Compile Include="ChatClient.Designer.cs">
       <DependentUpon>ChatClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="IO\Config.cs" />
+    <Compile Include="IO\ConfigKey.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
