@@ -55,6 +55,7 @@
       <DependentUpon>ChatClient.cs</DependentUpon>
     </Compile>
     <Compile Include="Database.cs" />
+    <Compile Include="Encryptor.cs" />
     <Compile Include="IO\Config.cs" />
     <Compile Include="IO\ConfigKey.cs" />
     <Compile Include="LoginForm.cs">

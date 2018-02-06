@@ -34,6 +34,7 @@
             this.usernameLabel = new System.Windows.Forms.Label();
             this.registerButton = new System.Windows.Forms.Button();
             this.loginButton = new System.Windows.Forms.Button();
+            this.rememberCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // usernameTextBox
@@ -70,7 +71,7 @@
             // 
             // registerButton
             // 
-            this.registerButton.Location = new System.Drawing.Point(40, 179);
+            this.registerButton.Location = new System.Drawing.Point(40, 184);
             this.registerButton.Name = "registerButton";
             this.registerButton.Size = new System.Drawing.Size(75, 23);
             this.registerButton.TabIndex = 4;
@@ -79,7 +80,7 @@
             // 
             // loginButton
             // 
-            this.loginButton.Location = new System.Drawing.Point(142, 179);
+            this.loginButton.Location = new System.Drawing.Point(142, 184);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(75, 23);
             this.loginButton.TabIndex = 5;
@@ -87,11 +88,22 @@
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
             // 
+            // rememberCheckBox
+            // 
+            this.rememberCheckBox.AutoSize = true;
+            this.rememberCheckBox.Location = new System.Drawing.Point(85, 161);
+            this.rememberCheckBox.Name = "rememberCheckBox";
+            this.rememberCheckBox.Size = new System.Drawing.Size(95, 17);
+            this.rememberCheckBox.TabIndex = 6;
+            this.rememberCheckBox.Text = "Remember Me";
+            this.rememberCheckBox.UseVisualStyleBackColor = true;
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(257, 241);
+            this.Controls.Add(this.rememberCheckBox);
             this.Controls.Add(this.loginButton);
             this.Controls.Add(this.registerButton);
             this.Controls.Add(this.usernameLabel);
@@ -114,5 +126,6 @@
         private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.Button registerButton;
         private System.Windows.Forms.Button loginButton;
+        private System.Windows.Forms.CheckBox rememberCheckBox;
     }
 }
