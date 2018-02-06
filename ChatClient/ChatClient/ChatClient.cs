@@ -18,7 +18,7 @@ namespace ChatClient
     public partial class ChatClientForm : Form
     {
         private Client client;
-        private string name = "Receiver1"; 
+        private string name = "Receiver2"; 
 
         public ChatClientForm()
         {
@@ -32,7 +32,7 @@ namespace ChatClient
                MessageBox.Show("Connection to server failed!");
                Close();
             }
-            client = new Client(Tclient, this);
+            client = new Client(Tclient, this, name);
             InitializeComponent();
             sendButton.TabStop = false;
             sendButton.FlatStyle = FlatStyle.Flat;
@@ -46,7 +46,7 @@ namespace ChatClient
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            client.Write(new PacketSendText(inputRichTextbox.Text, "Receiver2"));
+            client.Write(new PacketSendText(inputRichTextbox.Text, "Receiver1"));
             inputRichTextbox.Clear();
         }
 

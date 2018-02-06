@@ -31,7 +31,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.inputRichTextbox = new System.Windows.Forms.RichTextBox();
             this.sendButton = new System.Windows.Forms.Button();
-            this.chatBox1 = new GuiDLL.ChatBox();
+            this.chatBox = new GuiDLL.ChatBox();
             this.SuspendLayout();
             // 
             // label1
@@ -60,19 +60,19 @@
             this.sendButton.UseVisualStyleBackColor = true;
             this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
             // 
-            // chatBox1
+            // chatBox
             // 
-            this.chatBox1.AutoScroll = true;
-            this.chatBox1.BackColor = System.Drawing.Color.FloralWhite;
-            this.chatBox1.BackgroundColor = System.Drawing.Color.Empty;
-            this.chatBox1.DateBoxColor = System.Drawing.Color.Empty;
-            this.chatBox1.ForegroundColor = System.Drawing.Color.Empty;
-            this.chatBox1.FriendMessageColor = System.Drawing.Color.Empty;
-            this.chatBox1.Location = new System.Drawing.Point(12, 13);
-            this.chatBox1.Name = "chatBox1";
-            this.chatBox1.Size = new System.Drawing.Size(526, 468);
-            this.chatBox1.TabIndex = 5;
-            this.chatBox1.YourMessageColor = System.Drawing.Color.Empty;
+            this.chatBox.AutoScroll = true;
+            this.chatBox.BackColor = System.Drawing.Color.LightYellow;
+            this.chatBox.BackgroundColor = System.Drawing.Color.Empty;
+            this.chatBox.DateBoxColor = System.Drawing.Color.Empty;
+            this.chatBox.ForegroundColor = System.Drawing.Color.Empty;
+            this.chatBox.FriendMessageColor = System.Drawing.Color.Empty;
+            this.chatBox.Location = new System.Drawing.Point(12, 12);
+            this.chatBox.Name = "chatBox";
+            this.chatBox.Size = new System.Drawing.Size(526, 469);
+            this.chatBox.TabIndex = 5;
+            this.chatBox.YourMessageColor = System.Drawing.Color.Empty;
             // 
             // ChatClientForm
             // 
@@ -80,7 +80,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.ForestGreen;
             this.ClientSize = new System.Drawing.Size(551, 533);
-            this.Controls.Add(this.chatBox1);
+            this.Controls.Add(this.chatBox);
             this.Controls.Add(this.sendButton);
             this.Controls.Add(this.inputRichTextbox);
             this.Controls.Add(this.label1);
@@ -95,10 +95,9 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private GuiDLL.ChatBox chatBox;
         private System.Windows.Forms.RichTextBox inputRichTextbox;
         private System.Windows.Forms.Button sendButton;
-        private GuiDLL.ChatBox chatBox1;
+        private GuiDLL.ChatBox chatBox;
     }
 }
 
