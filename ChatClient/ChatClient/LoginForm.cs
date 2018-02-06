@@ -27,7 +27,17 @@ namespace ChatClient
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            db.Login(usernameTextBox.Text, passwordTextBox.Text);
+            bool check = true;
+
+            if (String.IsNullOrEmpty(passwordTextBox.Text) || String.IsNullOrEmpty(usernameTextBox.Text))
+            {
+                MessageBox.Show("Username or Password is empty");
+                check = false;
+            }
+            if(check == true)
+            {
+                db.Login(usernameTextBox.Text, passwordTextBox.Text);
+            }
         }
     }
 }
