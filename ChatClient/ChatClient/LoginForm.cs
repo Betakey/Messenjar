@@ -14,10 +14,16 @@ namespace ChatClient
     public partial class LoginForm : Form
     {
         Database db;
+        RegisterForm rForm;
+        ChatClientForm cForm;
+        bool check;
+
         public LoginForm()
         {
             InitializeComponent();
             db = new Database();
+            rForm = new RegisterForm();
+            check = true;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
@@ -27,17 +33,22 @@ namespace ChatClient
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            bool check = true;
-
             if (String.IsNullOrEmpty(passwordTextBox.Text) || String.IsNullOrEmpty(usernameTextBox.Text))
             {
-                MessageBox.Show("Username or Password is empty");
                 check = false;
+                MessageBox.Show("Username or Password is empty");
             }
             if(check == true)
             {
                 db.Login(usernameTextBox.Text, passwordTextBox.Text);
+                cForm = new ChatClientForm();
+                cForm.Show();
             }
+        }
+
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+            rForm.Show();
         }
     }
 }

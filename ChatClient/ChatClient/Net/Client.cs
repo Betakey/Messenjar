@@ -58,7 +58,7 @@ namespace ChatClient
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Connection lost!", " Failed to connect",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);

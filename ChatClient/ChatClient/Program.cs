@@ -20,7 +20,7 @@ namespace ChatClient
             Config = new Config();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ChatClientForm());
+            Application.Run(new LoginForm());
         }
     }
 }
