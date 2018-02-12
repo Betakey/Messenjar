@@ -13,24 +13,21 @@ namespace ChatClient
     public partial class RegisterForm : Form
     {
 
-        Database db;
-        bool check;
+        private Database db;
 
         public RegisterForm()
         {
             db = new Database();
             InitializeComponent();
-            check = false;
         }
 
         private void registerButton_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(passwordTextBox.Text) || String.IsNullOrEmpty(usernameTextBox.Text))
             {
-                check = true;
                 MessageBox.Show("Username or Password is empty");
             }
-            if (check == false)
+            else
             {
                 db.Register(usernameTextBox.Text, passwordTextBox.Text);
                 MessageBox.Show("Registration Completed!");
