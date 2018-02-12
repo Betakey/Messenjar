@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace ChatClient
 {
@@ -15,10 +16,13 @@ namespace ChatClient
 
         public MySqlConnection Connection { get; private set; }
 
+        //private bool exists;
+
         public Database()
         {
             ConnectionString = "SERVER=gethercode.de;UID=MessenJarAdmin;PASSWORD=sUg4n?89;DATABASE=MessenJarDB";
             Connection = new MySqlConnection(ConnectionString);
+            //exists = false;
         }
 
         public void OpenConnection()
@@ -41,6 +45,13 @@ namespace ChatClient
         public void Register(string userName, string password)  
         {
             OpenConnection();
+            //using (MySqlCommand cmd = new MySqlCommand("select count(*) from User where Name = @name", Connection))
+            //{
+            //    cmd.Parameters.AddWithValue("@name", userName);
+            //    bool exists = (int)cmd.ExecuteScalar() > 0;
+            //}
+            //if (exists) MessageBox.Show(userName, "This username has been used.");
+
             using (MySqlCommand command = new MySqlCommand(
                 "INSERT INTO User (Name, Password) VALUES (@name, @pw)", Connection))
             {

@@ -35,7 +35,7 @@ namespace ChatClient
           
             if (String.IsNullOrEmpty(passwordTextBox.Text) || String.IsNullOrEmpty(usernameTextBox.Text))
             {
-                MessageBox.Show("Username or Password is empty");
+                    MessageBox.Show("Username or Password is empty");
             }
             else  
             { 
@@ -49,6 +49,18 @@ namespace ChatClient
         private void registerButton_Click(object sender, EventArgs e)
         {
             rForm.Show();
+        }
+
+        private void showPwCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (showPwCheckBox.Checked)
+            {
+                passwordTextBox.PasswordChar = '\0';
+            }
+            else
+            {
+                passwordTextBox.PasswordChar = char.Parse("*");
+            }
         }
     }
 }
