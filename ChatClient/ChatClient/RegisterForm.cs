@@ -24,16 +24,20 @@ namespace ChatClient
 
         private void registerButton_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(passwordTextBox.Text) || String.IsNullOrEmpty(usernameTextBox.Text))
+            if (String.IsNullOrEmpty(usernameTextBox.Text))
             {
-                MessageBox.Show("Username or Password is empty", "Error!", MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Username is empty", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (String.IsNullOrEmpty(passwordTextBox.Text))
+            {
+                MessageBox.Show("Password is empty", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
                 db.Register(usernameTextBox.Text, passwordTextBox.Text);
-                usernameTextBox.Text = Username;
-                MessageBox.Show("Registration Completed!", "Succeeded!", MessageBoxButtons.OK,MessageBoxIcon.Information);
+               // MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
         }
 
         private void showPwCheckBox_CheckedChanged(object sender, EventArgs e)

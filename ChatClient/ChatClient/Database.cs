@@ -16,7 +16,7 @@ namespace ChatClient
 
         public MySqlConnection Connection { get; private set; }
 
-        private bool exists;
+        public bool exists;
 
         public Database()
         {
@@ -45,24 +45,29 @@ namespace ChatClient
         public void Register(string userName, string password)  
         {
             OpenConnection();
-            using (MySqlCommand cmd = new MySqlCommand("select * from User where Name = @name", Connection))
+            using (MySqlCommand cmd = new MySqlCommand("SELECT * from User where Name = @name", Connection))
             {
                 cmd.Parameters.Add("@name", MySqlDbType.Text);
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
+                    {
                         exists = true;
+                        MessageBox.Show("This username has been used.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
-            if (exists == false) MessageBox.Show( "This username has been used." , "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            using (MySqlCommand command = new MySqlCommand(
-                "INSERT INTO User (Name, Password) VALUES (@name, @pw)", Connection))
+            if (exists == false)
             {
-                command.Parameters.Add("@name", MySqlDbType.Text);
-                command.Parameters["@name"].Value = userName;
-                command.Parameters.Add("@pw", MySqlDbType.Text);
-                command.Parameters["@pw"].Value = CalculateMD5(password);
+                using (MySqlCommand command = new MySqlCommand(
+                    "INSERT INTO User (Name, Password) VALUES (@name, @pw)", Connection))
+                {
+                    command.Parameters.Add("@name", MySqlDbType.Text);
+                    command.Parameters["@name"].Value = userName;
+                    command.Parameters.Add("@pw", MySqlDbType.Text);
+                    command.Parameters["@pw"].Value = CalculateMD5(password);
+                }
+                MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             CloseConnection();
         }

@@ -32,16 +32,20 @@ namespace ChatClient
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-          
-            if (String.IsNullOrEmpty(passwordTextBox.Text) || String.IsNullOrEmpty(usernameTextBox.Text))
+
+            if (String.IsNullOrEmpty(usernameTextBox.Text))
             {
-                    MessageBox.Show("Username or Password is empty","Error!", MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Username is empty", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else  
-            { 
-                    db.Login(usernameTextBox.Text, passwordTextBox.Text);
-                    cForm = new ChatClientForm();
-                    cForm.Show();
+            else if (String.IsNullOrEmpty(passwordTextBox.Text))
+            {
+                MessageBox.Show("Password is empty", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                db.Login(usernameTextBox.Text, passwordTextBox.Text);
+                cForm = new ChatClientForm();
+                cForm.Show();
             }
           
         }
