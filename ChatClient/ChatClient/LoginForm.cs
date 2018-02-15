@@ -35,7 +35,7 @@ namespace ChatClient
           
             if (String.IsNullOrEmpty(passwordTextBox.Text) || String.IsNullOrEmpty(usernameTextBox.Text))
             {
-                    MessageBox.Show("Username or Password is empty");
+                    MessageBox.Show("Username or Password is empty","Error!", MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             else  
             { 

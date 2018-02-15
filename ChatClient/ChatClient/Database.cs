@@ -16,13 +16,13 @@ namespace ChatClient
 
         public MySqlConnection Connection { get; private set; }
 
-        //private bool exists;
+        private bool exists;
 
         public Database()
         {
             ConnectionString = "SERVER=gethercode.de;UID=MessenJarAdmin;PASSWORD=sUg4n?89;DATABASE=MessenJarDB";
             Connection = new MySqlConnection(ConnectionString);
-            //exists = false;
+            exists = false;
         }
 
         public void OpenConnection()
@@ -45,12 +45,16 @@ namespace ChatClient
         public void Register(string userName, string password)  
         {
             OpenConnection();
-            //using (MySqlCommand cmd = new MySqlCommand("select count(*) from User where Name = @name", Connection))
-            //{
-            //    cmd.Parameters.AddWithValue("@name", userName);
-            //    bool exists = (int)cmd.ExecuteScalar() > 0;
-            //}
-            //if (exists) MessageBox.Show(userName, "This username has been used.");
+            using (MySqlCommand cmd = new MySqlCommand("select * from User where Name = @name", Connection))
+            {
+                cmd.Parameters.Add("@name", MySqlDbType.Text);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                        exists = true;
+                }
+            }
+            if (exists == false) MessageBox.Show( "This username has been used." , "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             using (MySqlCommand command = new MySqlCommand(
                 "INSERT INTO User (Name, Password) VALUES (@name, @pw)", Connection))

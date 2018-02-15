@@ -26,13 +26,13 @@ namespace ChatClient
         {
             if (String.IsNullOrEmpty(passwordTextBox.Text) || String.IsNullOrEmpty(usernameTextBox.Text))
             {
-                MessageBox.Show("Username or Password is empty");
+                MessageBox.Show("Username or Password is empty", "Error!", MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             else
             {
                 db.Register(usernameTextBox.Text, passwordTextBox.Text);
                 usernameTextBox.Text = Username;
-                MessageBox.Show("Registration Completed!");
+                MessageBox.Show("Registration Completed!", "Succeeded!", MessageBoxButtons.OK,MessageBoxIcon.Information);
             }
         }
 
