@@ -26,8 +26,9 @@ namespace ChatClient
 
         public TcpClient TClient { get; private set; }
 
-        public Client(TcpClient client, ChatClientForm chatClientForm)
+        public Client(TcpClient client, ChatClientForm chatClientForm, string name)
         {
+            Name = name;
             TClient = client;
             Out = new StreamWriter(TClient.GetStream());
             In = new StreamReader(TClient.GetStream());
@@ -57,12 +58,11 @@ namespace ChatClient
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
-                    //MessageBox.Show("Connection lost!", " Failed to connect",
-                    //MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //chatClientForm.Close();
+                    MessageBox.Show("Connection lost!", " Failed to connect",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    chatClientForm.Close();
                 }
             });
             Thread.IsBackground = true;

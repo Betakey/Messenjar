@@ -18,10 +18,11 @@ namespace ChatClient
     public partial class ChatClientForm : Form
     {
         private Client client;
-        private string name = "Receiver1"; 
+        private string name; 
 
-        public ChatClientForm()
+        public ChatClientForm(string name, string friends)
         {
+            this.name = name;
             TcpClient Tclient = new TcpClient();
             try
             {
@@ -32,11 +33,17 @@ namespace ChatClient
                MessageBox.Show("Connection to server failed!");
                Close();
             }
-            client = new Client(Tclient, this);
+            client = new Client(Tclient, this, name);
             InitializeComponent();
             sendButton.TabStop = false;
             sendButton.FlatStyle = FlatStyle.Flat;
             sendButton.FlatAppearance.BorderSize = 0;
+            List<FriendEntry> entries = new List<FriendEntry>();
+            foreach (string friend in friends.Split(';'))
+            {
+                entries.Add(new FriendEntry(friend));
+            }
+            friendsList.Update(entries);
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -46,7 +53,7 @@ namespace ChatClient
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            client.Write(new PacketSendText(inputRichTextbox.Text, "Receiver2"));
+            client.Write(new PacketSendText(inputRichTextbox.Text, "Receiver1"));
             inputRichTextbox.Clear();
         }
 
@@ -59,6 +66,7 @@ namespace ChatClient
             if (packet is PacketSendID)
             {
                 client.ID = (packet as PacketSendID).ID;
+                client.Write(new PacketSendName(client.Name));
             }
             else if (packet is PacketSendHistory)
             {
@@ -82,6 +90,11 @@ namespace ChatClient
                     chatBox.Invoke(invoker);
                 } 
             }
+        }
+
+        private void ChatClientForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
