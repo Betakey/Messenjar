@@ -45,36 +45,53 @@ namespace ChatClient
         public void Register(string userName, string password)  
         {
             OpenConnection();
-            using (MySqlCommand cmd = new MySqlCommand("SELECT * from User where Name = @name", Connection))
+            using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM User WHERE Name = @name", Connection))
             {
                 cmd.Parameters.Add("@name", MySqlDbType.Text);
+                cmd.Parameters["@name"].Value = userName;
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
                         exists = true;
                         MessageBox.Show("This username has been used.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        CloseConnection();
+                        return;
+                    }
+                    else
+                    {
+                        using (MySqlCommand command = new MySqlCommand(
+                    "INSERT INTO User (Name, Password, Friends) VALUES (@name, @pw, @fr)", Connection))
+                        {
+                            command.Parameters.Add("@name", MySqlDbType.Text);
+                            command.Parameters["@name"].Value = userName;
+                            command.Parameters.Add("@pw", MySqlDbType.Text);
+                            command.Parameters["@pw"].Value = CalculateMD5(password);
+                            command.Parameters.Add("@fr", MySqlDbType.Text);
+                            command.Parameters["@fr"].Value = "Darki";
+                            command.ExecuteNonQuery();
+                        }
+                        MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
-            if (exists == false)
-            {
                 using (MySqlCommand command = new MySqlCommand(
-                    "INSERT INTO User (Name, Password) VALUES (@name, @pw)", Connection))
+                    "INSERT INTO User (Name, Password, Friends) VALUES (@name, @pw, @fr)", Connection))
                 {
                     command.Parameters.Add("@name", MySqlDbType.Text);
                     command.Parameters["@name"].Value = userName;
                     command.Parameters.Add("@pw", MySqlDbType.Text);
                     command.Parameters["@pw"].Value = CalculateMD5(password);
+                    command.Parameters.Add("@fr", MySqlDbType.Text);
+                    command.Parameters["@fr"].Value = "Darki";
+                    command.ExecuteNonQuery();
                 }
                 MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            CloseConnection();
+                CloseConnection();
         }
 
-        public bool Login(string username, string password)
+        public string Login(string username, string password)
         {
-            bool b = false;
             OpenConnection();
             using (MySqlCommand command = new MySqlCommand("SELECT * FROM User WHERE Name = @name AND Password = @pw", Connection))
             {
@@ -85,11 +102,15 @@ namespace ChatClient
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     if (reader.Read())
-                        b = true;
+                    {
+                        string s = reader["Friends"] as string;
+                        if (s == null) s = "";
+                        return s;
+                    }
                 }
             }
             CloseConnection();
-            return b;
+            return null;
         }
 
         private string CalculateMD5(string input)

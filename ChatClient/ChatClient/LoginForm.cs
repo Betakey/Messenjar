@@ -14,7 +14,6 @@ namespace ChatClient
     public partial class LoginForm : Form
     {
         private Database db;
-        private RegisterForm rForm;
         private ChatClientForm cForm;
         
 
@@ -22,7 +21,6 @@ namespace ChatClient
         {
             InitializeComponent();
             db = new Database();
-            rForm = new RegisterForm();
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
@@ -43,16 +41,20 @@ namespace ChatClient
             }
             else
             {
-                db.Login(usernameTextBox.Text, passwordTextBox.Text);
-                cForm = new ChatClientForm();
-                cForm.Show();
+                string s = db.Login(usernameTextBox.Text, passwordTextBox.Text);
+                if (s != null)
+                {
+                    cForm = new ChatClientForm(usernameTextBox.Text, s);
+                    cForm.Show();
+                    Hide();
+                }
             }
           
         }
 
         private void registerButton_Click(object sender, EventArgs e)
         {
-            rForm.Show();
+            new RegisterForm().ShowDialog();
         }
 
         private void showPwCheckBox_CheckedChanged(object sender, EventArgs e)
