@@ -69,6 +69,7 @@
             this.friendsList.Name = "friendsList";
             this.friendsList.Size = new System.Drawing.Size(256, 512);
             this.friendsList.TabIndex = 6;
+            this.friendsList.BubbleClick += new System.Action<object, System.Windows.Forms.MouseEventArgs, GuiDLL.FriendEntry>(this.friendsList_BubbleClick);
             // 
             // chatBox
             // 

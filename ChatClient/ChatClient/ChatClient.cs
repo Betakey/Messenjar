@@ -96,5 +96,10 @@ namespace ChatClient
         {
             Application.Exit();
         }
+
+        private void friendsList_BubbleClick(object sender, MouseEventArgs e, FriendEntry entry)
+        {
+            // TODO Search for open Message Server
+        }
     }
 }

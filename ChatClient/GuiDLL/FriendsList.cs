@@ -10,14 +10,14 @@ using System.Windows.Forms;
 
 namespace GuiDLL
 {
-    public partial class FriendsList : UserControl
+    public sealed partial class FriendsList : UserControl
     {
+        public event Action<object, MouseEventArgs, FriendEntry> BubbleClick;
 
         public FriendsList()
         {
             InitializeComponent();
             AutoScroll = true;
-
         }
 
         public void Update(List<FriendEntry> list)
@@ -28,10 +28,32 @@ namespace GuiDLL
             {
                 FriendBubble bubble = new FriendBubble(entry);
                 bubble.Location = new Point(0, y);
-                bubble.Size = new System.Drawing.Size(Width, 100);
+                bubble.Size = new Size(Width, 100);
                 bubble.Visible = true;
+                bubble.MouseClick += (sender, args) =>
+                {
+                    ResetSelection();
+                    bubble.IsSelected = true;
+                    BubbleClick?.Invoke(sender, args, entry);
+                };
                 Controls.Add(bubble);
                 y += 100;
+            }
+        }
+
+        private void ResetSelection()
+        {
+            foreach (Control control in Controls)
+            {
+                if (control is FriendBubble)
+                {
+                    FriendBubble bubble = (FriendBubble)control;
+                    if (bubble.IsSelected)
+                    {
+                        bubble.IsSelected = false;
+                        break;
+                    }
+                }
             }
         }
 

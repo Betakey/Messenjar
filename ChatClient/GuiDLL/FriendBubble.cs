@@ -14,6 +14,17 @@ namespace GuiDLL
 
         private bool notifyEnabled;
         private Label nameLabel;
+        private bool isSelected;
+
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                Invalidate();
+            }
+        }
 
         public bool NotifyEnabled
         {
@@ -44,6 +55,14 @@ namespace GuiDLL
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (isSelected)
+            {
+                BackColor = Color.DarkGray;
+            }
+            else
+            {
+                BackColor = Color.White;
+            }
             base.OnPaint(e);
             Graphics g = e.Graphics;
             g.DrawImage(Entry.Image, 5, 5, Height - 10, Height - 10);

@@ -1,6 +1,6 @@
 ﻿namespace GuiDLL
 {
-    partial class FriendsList
+    sealed partial class FriendsList
     {
         /// <summary> 
         /// Erforderliche Designervariable.
@@ -34,6 +34,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.Name = "FriendsList";
             this.Size = new System.Drawing.Size(150, 178);
             this.ResumeLayout(false);
