@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using ChatServer.IO;
@@ -64,10 +65,20 @@ namespace ChatServer.Net
         /// </summary>
         public void StartNewServer()
         {
+            Console.WriteLine("<> Starting new Message Server! Searching open Port...");
             int port = GeneratePort();
+            Console.WriteLine("<> Starting Message Server on Port " + port + "...");
             MessageServer server = new MessageServer(ip, port);
             server.Start();
             MessageServers.Add(server);
+            server.ClientConnected += (i, client) =>
+            {
+                if (i >= 10)
+                {
+                    StartNewServer();
+                }
+            };
+            Console.WriteLine("<> Message Server started!");
         }
 
         /// <summary>
@@ -76,7 +87,7 @@ namespace ChatServer.Net
         public int GeneratePort()
         {
             port++;
-            while (exceptionPorts.Contains(port) || IsPortInUse(port))
+            while (exceptionPorts.Contains(port) || IsPortInUseByTcp(port))
             {
                 port++;
             }
@@ -84,19 +95,20 @@ namespace ChatServer.Net
         }
 
         /// <summary>
-        /// Checks if there is another Message Server with the given Port
+        /// Checks if the Port is used by another TCP Application
         /// </summary>
-        private bool IsPortInUse(int port)
+        private bool IsPortInUseByTcp(int port)
         {
-            try
+            IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+            TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+            foreach (TcpConnectionInformation tcpi in tcpConnInfoArray)
             {
-                MessageServers.Find(x => x.Port == port);
-                return true;
+                if (tcpi.LocalEndPoint.Port == port)
+                {
+                    return true;
+                }
             }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
