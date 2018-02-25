@@ -16,13 +16,10 @@ namespace ChatClient
 
         public MySqlConnection Connection { get; private set; }
 
-        public bool exists;
-
         public Database()
         {
             ConnectionString = "SERVER=gethercode.de;UID=MessenJarAdmin;PASSWORD=sUg4n?89;DATABASE=MessenJarDB";
             Connection = new MySqlConnection(ConnectionString);
-            exists = false;
         }
 
         public void OpenConnection()
@@ -42,34 +39,50 @@ namespace ChatClient
             Connection.Close();
         }
 
-        public void Register(string userName, string password)  
+        public bool Register(string userName, string password)
         {
+            bool exists = false;
             OpenConnection();
             using (MySqlCommand cmd = new MySqlCommand("SELECT * from User where Name = @name", Connection))
             {
                 cmd.Parameters.Add("@name", MySqlDbType.Text);
+                cmd.Parameters["@name"].Value = userName;
+
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
-                        exists = true;
                         MessageBox.Show("This username has been used.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        exists = true;
+                    }
+                    else if (exists == false)
+                    {
+                        using (MySqlCommand command = new MySqlCommand(
+                            "INSERT INTO User (Name, Password) VALUES (@name, @pw)", Connection))
+                        {
+                            command.Parameters.Add("@name", MySqlDbType.Text);
+                            command.Parameters["@name"].Value = userName;
+                            command.Parameters.Add("@pw", MySqlDbType.Text);
+                            command.Parameters["@pw"].Value = CalculateMD5(password);
+                        }
+                        MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
-            if (exists == false)
-            {
-                using (MySqlCommand command = new MySqlCommand(
-                    "INSERT INTO User (Name, Password) VALUES (@name, @pw)", Connection))
-                {
-                    command.Parameters.Add("@name", MySqlDbType.Text);
-                    command.Parameters["@name"].Value = userName;
-                    command.Parameters.Add("@pw", MySqlDbType.Text);
-                    command.Parameters["@pw"].Value = CalculateMD5(password);
-                }
-                MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            //if(exists == false)
+            //{
+            //    using (MySqlCommand command = new MySqlCommand(
+            //        "INSERT INTO User (Name, Password) VALUES (@name, @pw)", Connection))
+            //    {
+            //        command.Parameters.Add("@name", MySqlDbType.Text);
+            //        command.Parameters["@name"].Value = userName;
+            //        command.Parameters.Add("@pw", MySqlDbType.Text);
+            //        command.Parameters["@pw"].Value = CalculateMD5(password);
+            //    }
+            //    MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //}
             CloseConnection();
+            return exists;
         }
 
         public bool Login(string username, string password)
