@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using NetDLL;
@@ -30,6 +27,14 @@ namespace ChatClient
         private Database database;
         private string friends;
 
+        /// <summary>
+        /// Tries to connect to the server, checks if a ProfilImage exists and checks if you have friends.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="name"></param>
+        /// <param name="friends"></param>
+        /// <param name="imageBytes"></param>
+        
         public ChatClientForm(Database db, string name, string friends, byte[] imageBytes)
         {
             this.friends = friends;
@@ -43,8 +48,8 @@ namespace ChatClient
             }
             catch
             {
-               MessageBox.Show("Connection to server failed!");
-               Close();
+                MessageBox.Show("Verbindung fehlgeschlagen!", "Verbindungsfehler!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
                return;
             }
             client = new Client(Tclient, this, name);
@@ -73,17 +78,20 @@ namespace ChatClient
             yourFriendsList.Update(entries);
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
+        /// <summary>
+        /// Sends the message and checks if you have a friends selected.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sendButton_Click(object sender, EventArgs e)
         {
             if (friendsList.Selected == null) return;
             SendMessage();
         }
 
+        /// <summary>
+        /// Methode for sending a message and updates the statusPictureBox.
+        /// </summary>
         private void SendMessage()
         {
             try
@@ -91,13 +99,13 @@ namespace ChatClient
                 statusPictureBox.Image = Properties.Resources.loading;
                 statusHoverMessage = "Nachricht wird gesendet...";
                 statusHoverTitle = "Sende Nachricht...";
-                client.Write(new PacketSendText(inputRichTextbox.Text, friendsList.Selected.Name));
+                messageClient.Write(new PacketSendText(inputRichTextbox.Text, friendsList.Selected.Name));
                 inputRichTextbox.Clear();
                 statusPictureBox.Image = null;
                 statusHoverMessage = "";
                 statusHoverTitle = "";
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 statusPictureBox.Image = Properties.Resources.error;
                 statusHoverMessage = "Fehler beim Senden der Nachricht aufgetreten! Versuche erneut...";
@@ -109,7 +117,7 @@ namespace ChatClient
         /// <summary>
         /// Checks the type of a Packet.
         /// </summary>
-        /// <param name="packet"></param>
+        /// <param name="packet">The Receive Packet</param>
         public void PacketHandler(Packet packet)
         {
             if (packet is PacketSendID)
@@ -235,6 +243,12 @@ namespace ChatClient
             }
         }
 
+        /// <summary>
+        /// Shows the homePanel and hides the messageClient
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        
         private void iconPictureBox_Click(object sender, EventArgs e)
         {
             if(messageClient != null)
@@ -249,6 +263,12 @@ namespace ChatClient
             chatBox.Hide();
         }
 
+        /// <summary>
+        /// Shows the status by hovering over it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+      
         private void statusPictureBox_MouseHover(object sender, EventArgs e)
         {
             if(statusHoverTitle != "" && statusHoverMessage != "")
@@ -259,6 +279,12 @@ namespace ChatClient
             }
         }
 
+        /// <summary>
+        /// Editing your ProfilImage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        
         private void editImageButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -274,11 +300,18 @@ namespace ChatClient
             }
         }
 
+        /// <summary>
+        /// Adds a friend to your friendsList and checks if hes already in your list or if he even exists.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        
         private void addButton_Click(object sender, EventArgs e)
         {
             if (!database.IsUserExisting(searchNameTextBox.Text))
             {
-                MessageBox.Show("User not existing");
+                MessageBox.Show("Benutzer existiert nicht!", " Fehler!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (string.IsNullOrEmpty(friends))
@@ -289,7 +322,7 @@ namespace ChatClient
             {
                 if (friends.Contains(searchNameTextBox.Text))
                 {
-                    MessageBox.Show("Du hast bereits " + searchNameTextBox.Text + " als Freund!");
+                    MessageBox.Show("Du hast bereits " + searchNameTextBox.Text + " als Freund!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 friends += ";" + searchNameTextBox.Text;
@@ -304,9 +337,15 @@ namespace ChatClient
             }
             friendsList.Update(entries);
             yourFriendsList.Update(entries);
-            MessageBox.Show("Freund hinzugefügt!");
+            MessageBox.Show("Freund erfolgreich hinzugefügt!","Hinzugefügt", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// Removes a friend in your friendsList
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        
         private void removeFriendTextBox_Click(object sender, EventArgs e)
         {
             if(yourFriendsList.Selected != null)
@@ -329,7 +368,7 @@ namespace ChatClient
                 }
                 friendsList.Update(entries);
                 yourFriendsList.Update(entries);
-                MessageBox.Show("Freund entfernt!");
+                MessageBox.Show("Freund erfolgreich entfernt!", "Entfernt!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
