@@ -96,6 +96,7 @@ namespace ChatServer
             }
             NetworkServer = new NetworkServer(ip);
             NetworkServer.Start();
+            MessageServerHandler.StartNewServer();
         }
 
         private void PostInit()

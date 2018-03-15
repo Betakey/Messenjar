@@ -26,6 +26,8 @@ namespace ChatServer.Net
 
         public bool IsAlive { get; private set; }
 
+        public event Action<int, ServerHandledClient> ClientConnected;
+
         public Server(string ip, int port)
         {
             IP = IPAddress.Parse(ip);
@@ -85,10 +87,17 @@ namespace ChatServer.Net
                 while (IsAlive)
                 {
                     TcpClient client = Listener.AcceptTcpClient();
+                    if (Clients.Count >= 10)
+                    {
+                        client.Close();
+                        Console.WriteLine("[" + Port + "] -> Client declined because of missing Space! (IP-Endpoint: " + client.Client.LocalEndPoint + ")");
+                        continue;
+                    }
                     Console.WriteLine("[" + Port + "] -> Client accepted (IP-Endpoint: " + client.Client.LocalEndPoint + ")");
                     ServerHandledClient handledClient = new ServerHandledClient(client, this);
                     Clients.Add(handledClient);
                     handledClient.SendPacket(new PacketSendID(handledClient.ID));
+                    ClientConnected?.Invoke(Clients.Count, handledClient);
                 }
             }
             catch
