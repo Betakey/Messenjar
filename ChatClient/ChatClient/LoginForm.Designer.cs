@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             this.usernameTextBox = new System.Windows.Forms.TextBox();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.passwordLabel = new System.Windows.Forms.Label();
@@ -35,7 +36,7 @@
             this.registerButton = new System.Windows.Forms.Button();
             this.loginButton = new System.Windows.Forms.Button();
             this.showPwCheckBox = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.rememberCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // usernameTextBox
@@ -102,22 +103,22 @@
             this.showPwCheckBox.UseVisualStyleBackColor = true;
             this.showPwCheckBox.CheckedChanged += new System.EventHandler(this.showPwCheckBox_CheckedChanged);
             // 
-            // checkBox1
+            // rememberCheckBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(84, 183);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(95, 17);
-            this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "Remember Me";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.rememberCheckBox.AutoSize = true;
+            this.rememberCheckBox.Location = new System.Drawing.Point(84, 183);
+            this.rememberCheckBox.Name = "rememberCheckBox";
+            this.rememberCheckBox.Size = new System.Drawing.Size(95, 17);
+            this.rememberCheckBox.TabIndex = 7;
+            this.rememberCheckBox.Text = "Remember Me";
+            this.rememberCheckBox.UseVisualStyleBackColor = true;
             // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(257, 241);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.rememberCheckBox);
             this.Controls.Add(this.showPwCheckBox);
             this.Controls.Add(this.loginButton);
             this.Controls.Add(this.registerButton);
@@ -125,9 +126,12 @@
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.usernameTextBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(273, 280);
+            this.MinimumSize = new System.Drawing.Size(273, 280);
             this.Name = "LoginForm";
             this.Text = "LoginForm";
-            this.Load += new System.EventHandler(this.LoginForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,6 +146,6 @@
         private System.Windows.Forms.Button registerButton;
         private System.Windows.Forms.Button loginButton;
         private System.Windows.Forms.CheckBox showPwCheckBox;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox rememberCheckBox;
     }
 }

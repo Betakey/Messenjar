@@ -13,6 +13,20 @@ namespace GuiDLL
     public sealed partial class FriendsList : UserControl
     {
         public event Action<object, MouseEventArgs, FriendEntry> BubbleClick;
+        public FriendEntry Selected
+        {
+            get
+            {
+                foreach(FriendBubble bubble in Controls)
+                {
+                    if (bubble.IsSelected)
+                    {
+                        return bubble.Entry;
+                    }
+                }
+                return null;
+            }
+        }
 
         public FriendsList()
         {
@@ -30,18 +44,18 @@ namespace GuiDLL
                 bubble.Location = new Point(0, y);
                 bubble.Size = new Size(Width, 100);
                 bubble.Visible = true;
-                bubble.MouseClick += (sender, args) =>
+                bubble.BubbleClicked += (args) =>
                 {
                     ResetSelection();
                     bubble.IsSelected = true;
-                    BubbleClick?.Invoke(sender, args, entry);
+                    BubbleClick?.Invoke(this, args, entry);
                 };
                 Controls.Add(bubble);
                 y += 100;
             }
         }
 
-        private void ResetSelection()
+        public void ResetSelection()
         {
             foreach (Control control in Controls)
             {
@@ -51,6 +65,22 @@ namespace GuiDLL
                     if (bubble.IsSelected)
                     {
                         bubble.IsSelected = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void HideNotify(string friendName)
+        {
+            foreach (Control control in Controls)
+            {
+                if (control is FriendBubble)
+                {
+                    FriendBubble bubble = (FriendBubble)control;
+                    if (bubble.Entry.Name == friendName)
+                    {
+                        bubble.NotifyEnabled = false;
                         break;
                     }
                 }

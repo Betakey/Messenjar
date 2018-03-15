@@ -34,8 +34,7 @@ namespace ChatClient
             }
             else
             {
-                db.Register(usernameTextBox.Text, passwordTextBox.Text);
-               // MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (db.Register(usernameTextBox.Text, passwordTextBox.Text)) Close();
             }
 
         }

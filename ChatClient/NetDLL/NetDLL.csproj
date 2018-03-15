@@ -45,6 +45,7 @@
     <Compile Include="Cryptor.cs" />
     <Compile Include="Data\MessageData.cs" />
     <Compile Include="Packet.cs" />
+    <Compile Include="PacketRequestHistory.cs" />
     <Compile Include="PacketRequestMessageServer.cs" />
     <Compile Include="PacketSendHistory.cs" />
     <Compile Include="PacketSendID.cs" />
