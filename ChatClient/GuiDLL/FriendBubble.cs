@@ -10,6 +10,7 @@ namespace GuiDLL
 {
     internal class FriendBubble : Panel
     {
+        public event Action<MouseEventArgs> BubbleClicked;
         public FriendEntry Entry { get; private set; }
 
         private bool notifyEnabled;
@@ -50,6 +51,14 @@ namespace GuiDLL
             nameLabel.Size = new Size(Width - Height - 5, Height);
             BackColor = Color.White;
             nameLabel.Font = new System.Drawing.Font(nameLabel.Font.FontFamily, 22, FontStyle.Bold);
+            nameLabel.MouseClick += (sender, args) =>
+            {
+                BubbleClicked?.Invoke(args);
+            };
+            MouseClick += (sender, args) =>
+            {
+                BubbleClicked?.Invoke(args);
+            };
             Controls.Add(nameLabel);
         }
 
@@ -69,7 +78,7 @@ namespace GuiDLL
             g.DrawString(Entry.Name, Font, Brushes.Black, new Point(Width - (Height - 10) / 2 + (Height - 10) - (int)g.MeasureString(Entry.Name, Font).Width / 2, Height / 2 - (int)g.MeasureString(Entry.Name, Font).Height / 2));
             if (notifyEnabled)
             {
-                g.DrawImage(Properties.Resources.exclamation_mark_PNG52, Width - 12, 2, 10, 10);
+                g.DrawImage(Properties.Resources.exclamation_mark_PNG52, Width - 27, 2, 25, 25);
             }
         }
     }

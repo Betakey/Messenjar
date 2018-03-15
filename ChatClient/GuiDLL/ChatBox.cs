@@ -36,6 +36,13 @@ namespace GuiDLL
             history = new Dictionary<DateTime, List<ChatBoxEntry>>();
         }
 
+        public void Clear()
+        {
+            history.Clear();
+            Controls.Clear();
+            Invalidate();
+        }
+
         public void AddChatMessage(Dictionary<DateTime, List<ChatBoxEntry>> contentNotOrdered, string yourName)
         {
             Dictionary<DateTime, List<ChatBoxEntry>> content = new Dictionary<DateTime, List<ChatBoxEntry>>();

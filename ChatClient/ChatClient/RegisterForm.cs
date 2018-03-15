@@ -34,7 +34,7 @@ namespace ChatClient
             }
             else
             {
-                db.Register(usernameTextBox.Text, passwordTextBox.Text);
+                if (db.Register(usernameTextBox.Text, passwordTextBox.Text)) Close();
             }
 
         }

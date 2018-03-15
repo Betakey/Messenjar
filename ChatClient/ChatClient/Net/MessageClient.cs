@@ -12,11 +12,9 @@ using NetDLL;
 
 namespace ChatClient
 {
-    public class Client
+    public class MessageClient
     {
         public Guid ID { get; set; }
-
-        public string Name { get; private set; }
 
         public Thread Thread { get; private set; }
 
@@ -26,9 +24,8 @@ namespace ChatClient
 
         public TcpClient TClient { get; private set; }
 
-        public Client(TcpClient client, ChatClientForm chatClientForm, string name)
+        public MessageClient(TcpClient client, Action disconnectCallback, Action<Packet> packetHandleCallback)
         {
-            Name = name;
             TClient = client;
             Out = new StreamWriter(TClient.GetStream());
             In = new StreamReader(TClient.GetStream());
@@ -54,19 +51,13 @@ namespace ChatClient
                             }
                             Packet packet = Packet.ToPacket(bytes);
                             if (packet != null)
-                                chatClientForm.PacketHandler(packet);
+                                packetHandleCallback(packet);
                         }
                     }
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Connection lost!", " Failed to connect",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    MethodInvoker invoker = delegate
-                    {
-                        chatClientForm.Close();
-                    };
-                    chatClientForm.Invoke(invoker);
+                    disconnectCallback();
                 }
             });
             Thread.IsBackground = true;
@@ -80,6 +71,7 @@ namespace ChatClient
             Thread.Abort();
             In.Close();
             Out.Close();
+            TClient.Close();
         }
 
         /// <summary>
