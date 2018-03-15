@@ -61,7 +61,7 @@ namespace ChatClient
                     else
                     {
                         using (MySqlCommand command = new MySqlCommand(
-                    "INSERT INTO User (Name, Password, Friends) VALUES (@name, @pw, @fr)", Connection))
+                            "INSERT INTO User (Name, Password, Friends) VALUES (@name, @pw, @fr)", Connection))
                         {
                             command.Parameters.Add("@name", MySqlDbType.Text);
                             command.Parameters["@name"].Value = userName;
@@ -75,18 +75,6 @@ namespace ChatClient
                     }
                 }
             }
-                using (MySqlCommand command = new MySqlCommand(
-                    "INSERT INTO User (Name, Password, Friends) VALUES (@name, @pw, @fr)", Connection))
-                {
-                    command.Parameters.Add("@name", MySqlDbType.Text);
-                    command.Parameters["@name"].Value = userName;
-                    command.Parameters.Add("@pw", MySqlDbType.Text);
-                    command.Parameters["@pw"].Value = CalculateMD5(password);
-                    command.Parameters.Add("@fr", MySqlDbType.Text);
-                    command.Parameters["@fr"].Value = "Darki";
-                    command.ExecuteNonQuery();
-                }
-                MessageBox.Show("Registration Completed!", "Succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CloseConnection();
         }
 
@@ -116,21 +104,15 @@ namespace ChatClient
         private string CalculateMD5(string input)
         {
             MD5 md5 = System.Security.Cryptography.MD5.Create();
-
             byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-
             byte[] hash = md5.ComputeHash(inputBytes);
-
             StringBuilder sb = new StringBuilder();
-
             for (int i = 0; i < hash.Length; i++)
-
             {
 
                 sb.Append(hash[i].ToString("X2"));
 
             }
-
             return sb.ToString();
         }
     }
