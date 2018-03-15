@@ -18,7 +18,7 @@ namespace ChatClient
 
         public MySqlConnection Connection { get; private set; }
 
-        public bool exists;
+        public bool exists; // Boolean that checks if a user exisits
 
         public Database()
         {
@@ -27,6 +27,10 @@ namespace ChatClient
             exists = false;
         }
 
+        /// <summary>
+        /// Opens a connnection to the database
+        /// </summary>
+        
         public void OpenConnection()
         {
             try
@@ -40,6 +44,12 @@ namespace ChatClient
             }
         }
 
+        /// <summary>
+        /// Updates friends in the Database.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="friends"></param>
+        
         public void UpdateFriends(string name, string friends)
         {
             OpenConnection();
@@ -54,12 +64,21 @@ namespace ChatClient
             CloseConnection();
         }
 
+        /// <summary>
+        /// Closes the connection to the database.
+        /// </summary>
+        
         public void CloseConnection()
         {
             Connection.Close();
         }
 
-
+        /// <summary>
+        /// Gets the ProfilImage from the Database.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Bitmap or Null</returns>
+        
         public Bitmap GetProfileImage(string name)
         {
             OpenConnection();
@@ -85,6 +104,12 @@ namespace ChatClient
             return null;
         }
 
+        /// <summary>
+        /// Updates the profilImage in the Database.
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="name"></param>
+        
         public void ChangePicture(byte[] bytes, string name)
         {
             OpenConnection();
@@ -99,6 +124,12 @@ namespace ChatClient
             CloseConnection();
         }
 
+        /// <summary>
+        /// Checks if user is already existing in the database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>true or false</returns>
+        
         public bool IsUserExisting(string name)
         {
             OpenConnection();
@@ -120,6 +151,13 @@ namespace ChatClient
             return false;
         }
 
+        /// <summary>
+        /// Registration for a User.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns>true or false</returns>
+        
         public bool Register(string userName, string password)  
         {
             if (IsUserExisting(userName))
@@ -147,6 +185,14 @@ namespace ChatClient
             }
         }
 
+        /// <summary>
+        /// Login for a user checks if user has friends.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="imageBytes"></param>
+        /// <returns>friends or null</returns>
+        
         public string Login(string username, string password, out byte[] imageBytes)
         {
             OpenConnection();
@@ -160,11 +206,11 @@ namespace ChatClient
                 {
                     if (reader.Read())
                     {
-                        string s = reader["Friends"] as string;
-                        if (s == null) s = "";
+                        string friends = reader["Friends"] as string;
+                        if (friends == null) friends = "";
                         byte[] bytes = reader["ProfileImage"] as byte[];
                         imageBytes = bytes;
-                        return s;
+                        return friends;
                     }
                 }
             }
@@ -173,6 +219,12 @@ namespace ChatClient
             return null;
         }
 
+        /// <summary>
+        /// Calculates MD5 Hash to Hash Password
+        /// </summary>
+        /// <param name="input">The decrypted Password to hash</param>
+        /// <returns>The hashed Password</returns>
+        
         private string CalculateMD5(string input)
         {
             MD5 md5 = System.Security.Cryptography.MD5.Create();

@@ -68,6 +68,7 @@ namespace ChatClient
         /// </summary>
         public void Close()
         {
+            TClient.GetStream().Close();
             Thread.Abort();
             In.Close();
             Out.Close();
