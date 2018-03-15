@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Newtonsoft.Json;
 
 namespace NetDLL
 {
@@ -13,7 +8,7 @@ namespace NetDLL
     public abstract class Packet
     {
         /// <summary>
-        /// Converts a Byte Array to a Packet Object via Deserialization
+        ///     Converts a Byte Array to a Packet Object via Deserialization
         /// </summary>
         public static Packet ToPacket(byte[] bytes)
         {
@@ -26,7 +21,7 @@ namespace NetDLL
         }
 
         /// <summary>
-        /// Converts a Packet Object to a Byte Array via Serialization
+        ///     Converts a Packet Object to a Byte Array via Serialization
         /// </summary>
         public byte[] ToBytes()
         {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using NetDLL.Data;
@@ -8,9 +10,9 @@ using Newtonsoft.Json;
 
 namespace ChatServer.IO
 {
+    [Serializable]
     public class UserData
     {
-        [JsonIgnore]
         public string Name { get; private set; }
 
         public List<MessageData> MessageHistory { get; private set; }
@@ -24,6 +26,20 @@ namespace ChatServer.IO
             NewMessages = new List<string>();
         }
 
+        public UserData()
+        {
+            
+        }
+
+        public UserData(List<MessageData> messageHistory, List<string> newMessages)
+        {
+            MessageHistory = messageHistory;
+            NewMessages = newMessages;
+        }
+
+        /// <summary>
+        /// Gets all Message of the Chat with the given FriendName sorted by the Date
+        /// </summary>
         public Dictionary<DateTime, List<MessageData>> SortMessgaeByDate(string friendName)
         {
             Dictionary<DateTime, List<MessageData>> dict = new Dictionary<DateTime, List<MessageData>>();
@@ -49,6 +65,9 @@ namespace ChatServer.IO
             return dict;
         }
 
+        /// <summary>
+        /// Gets all Messages sorted by the Date
+        /// </summary>
         public Dictionary<DateTime, List<MessageData>> SortMessageByDate()
         {
             Dictionary<DateTime, List<MessageData>> dict = new Dictionary<DateTime, List<MessageData>>();
@@ -73,15 +92,32 @@ namespace ChatServer.IO
             return dict;
         }
 
-        public override string ToString()
+        /// <summary>
+        /// Converts UserData Object to a Byte Array
+        /// </summary>
+        public byte[] ToBytes()
         {
-            return JsonConvert.SerializeObject(this);
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+            binaryFormatter.Serialize(ms, this);
+            byte[] bytes = ms.GetBuffer();
+            ms.Close();
+            return bytes;
         }
 
-        public static UserData ToUserData(string name, string s)
+        /// <summary>
+        /// Converts a Byte Array to an UserData Object
+        /// </summary>
+        public static UserData ToUserData(string name, byte[] bytes)
         {
-            UserData data = JsonConvert.DeserializeObject<UserData>(s);
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream(bytes);
+            ms.Position = 0;
+            object obj = binaryFormatter.Deserialize(ms);
+            ms.Close();
+            UserData data = obj as UserData;
             data.Name = name;
+            if(data.NewMessages == null) data.NewMessages = new List<string>();
             return data;
         }
     }

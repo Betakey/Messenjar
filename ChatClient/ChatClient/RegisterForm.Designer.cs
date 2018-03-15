@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterForm));
             this.usernameTextBox = new System.Windows.Forms.TextBox();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.passwordLabel = new System.Windows.Forms.Label();
@@ -56,9 +57,9 @@
             this.passwordLabel.AutoSize = true;
             this.passwordLabel.Location = new System.Drawing.Point(19, 104);
             this.passwordLabel.Name = "passwordLabel";
-            this.passwordLabel.Size = new System.Drawing.Size(56, 13);
+            this.passwordLabel.Size = new System.Drawing.Size(50, 13);
             this.passwordLabel.TabIndex = 2;
-            this.passwordLabel.Text = "Password:";
+            this.passwordLabel.Text = "Passwort";
             // 
             // registerButton
             // 
@@ -66,7 +67,7 @@
             this.registerButton.Name = "registerButton";
             this.registerButton.Size = new System.Drawing.Size(260, 32);
             this.registerButton.TabIndex = 3;
-            this.registerButton.Text = "Register";
+            this.registerButton.Text = "Registrieren";
             this.registerButton.UseVisualStyleBackColor = true;
             this.registerButton.Click += new System.EventHandler(this.registerButton_Click);
             // 
@@ -75,18 +76,18 @@
             this.usernameLabel.AutoSize = true;
             this.usernameLabel.Location = new System.Drawing.Point(17, 42);
             this.usernameLabel.Name = "usernameLabel";
-            this.usernameLabel.Size = new System.Drawing.Size(58, 13);
+            this.usernameLabel.Size = new System.Drawing.Size(38, 13);
             this.usernameLabel.TabIndex = 5;
-            this.usernameLabel.Text = "Username:";
+            this.usernameLabel.Text = "Name:";
             // 
             // showPwCheckBox
             // 
             this.showPwCheckBox.AutoSize = true;
             this.showPwCheckBox.Location = new System.Drawing.Point(102, 132);
             this.showPwCheckBox.Name = "showPwCheckBox";
-            this.showPwCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.showPwCheckBox.Size = new System.Drawing.Size(99, 17);
             this.showPwCheckBox.TabIndex = 6;
-            this.showPwCheckBox.Text = "Show Password";
+            this.showPwCheckBox.Text = "Zeige Passwort";
             this.showPwCheckBox.UseVisualStyleBackColor = true;
             this.showPwCheckBox.CheckedChanged += new System.EventHandler(this.showPwCheckBox_CheckedChanged);
             // 
@@ -101,8 +102,12 @@
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.usernameTextBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(300, 238);
+            this.MinimumSize = new System.Drawing.Size(300, 238);
             this.Name = "RegisterForm";
-            this.Text = "RegisterForm";
+            this.Text = "MessenJar: Registrieren";
             this.ResumeLayout(false);
             this.PerformLayout();
 

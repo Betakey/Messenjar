@@ -27,8 +27,10 @@ namespace ChatServer.Net
                     data = new UserData(client.Name);
                     Program.Instance.UserDataManager.Datas.Add(data);
                 }
-                data.MessageHistory.Add(new MessageData(_packet));
+                data.MessageHistory.Add(new MessageData(_packet, client.Name));
                 client.SendPacket(new PacketSendHistory(data.SortMessageByDate()));
+                client.SendPacket(new PacketSendHistory(data.SortMessageByDate()));// I have to send this Packet twice because of a Bug:
+                                                                                   // with the ChatBox which is duplicating values
                 // Receiver
                 UserData receiverData = Program.Instance.UserDataManager.GetData(_packet.Receiver);
                 if (receiverData == null)
@@ -36,11 +38,14 @@ namespace ChatServer.Net
                     receiverData = new UserData(_packet.Receiver);
                     Program.Instance.UserDataManager.Datas.Add(receiverData);
                 }
-                receiverData.MessageHistory.Add(new MessageData(client.Name, _packet.Text, _packet.Time));
+                receiverData.MessageHistory.Add(new MessageData(client.Name, _packet.Text, _packet.Time, client.Name));
                 ServerHandledClient receiver = Program.Instance.MessageServerHandler.GetClient(_packet.Receiver);
                 if (receiver != null)
                 {
                     receiver.SendPacket(new PacketSendHistory(receiverData.SortMessageByDate()));
+                    receiver.SendPacket(new PacketSendHistory(receiverData.SortMessageByDate())); // I have to send this Packet twice because of a Bug:
+                                                                                                  // with the ChatBox which is duplicating values
+                    receiver.SendPacket(new PacketSendNewMessageNotify(client.Name));
                 }
                 else
                 {
@@ -56,6 +61,10 @@ namespace ChatServer.Net
                     }
                 }
                 Program.Instance.UserDataManager.Save();
+            }
+            else if (packet is PacketSendName)
+            {
+                client.Name = ((PacketSendName)packet).Name;
             }
         }
     }

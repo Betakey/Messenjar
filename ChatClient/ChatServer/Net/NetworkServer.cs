@@ -17,20 +17,19 @@ namespace ChatServer.Net
 
         public override void OnPacketReceived(ServerHandledClient client, Packet packet)
         {
-            /*if (packet is PacketSendText)
-            {
-                Dictionary<DateTime,List<MessageData>> dict = new Dictionary<DateTime,List<MessageData>>();
-                List<MessageData> datas = new List<MessageData>();
-                datas.Add(new MessageData((PacketSendText)packet));
-                dict.Add(DateTime.Today, datas);
-                client.SendPacket(new PacketSendHistory(dict));
-                ServerHandledClient receiver = GetClient(((PacketSendText)packet).Receiver);
-                if (receiver != null) receiver.SendPacket(new PacketSendHistory(dict));
-            }
-            else */
             if (packet is PacketSendName)
             {
                 client.Name = ((PacketSendName) packet).Name;
+                UserData data = Program.Instance.UserDataManager.GetData(client.Name);
+                if (data != null)
+                {
+                    foreach (string friendName in data.NewMessages)
+                    {
+                        client.SendPacket(new PacketSendNewMessageNotify(friendName));
+                    }
+                    data.NewMessages.Clear();
+                    Program.Instance.UserDataManager.Save();
+                }
             }
             else if (packet is PacketRequestHistory)
             {
@@ -38,10 +37,14 @@ namespace ChatServer.Net
                 if (userData == null)
                 {
                     client.SendPacket(new PacketSendHistory(new Dictionary<DateTime, List<MessageData>>()));
+                    client.SendPacket(new PacketSendHistory(new Dictionary<DateTime, List<MessageData>>())); // I have to send this Packet twice because of a Bug:
+                                                                                                             // with the ChatBox which is duplicating values
                 }
                 else
                 {
                     client.SendPacket(new PacketSendHistory(userData.SortMessgaeByDate(((PacketRequestHistory)packet).FriendName)));
+                    client.SendPacket(new PacketSendHistory(userData.SortMessgaeByDate(((PacketRequestHistory)packet).FriendName))); // I have to send this Packet twice because of a Bug:
+                                                                                                                                     // with the ChatBox which is duplicating values
                 }
             }
         }

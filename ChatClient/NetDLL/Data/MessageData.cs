@@ -13,20 +13,24 @@ namespace NetDLL.Data
 
         public string FriendName { get; private set; }
 
+        public string Sender { get; private set; }
+
         public DateTime Time { get; private set; }
 
-        public MessageData(PacketSendText packet)
+        public MessageData(PacketSendText packet, string sender)
         {
             FriendName = packet.Receiver;
             Message = packet.Text;
             Time = packet.Time;
+            Sender = sender;
         }
 
-        public MessageData(string friendName, string message, DateTime time)
+        public MessageData(string friendName, string message, DateTime time, string sender)
         {
             FriendName = friendName;
             Message = message;
             Time = time;
+            Sender = sender;
         }
     }
 }

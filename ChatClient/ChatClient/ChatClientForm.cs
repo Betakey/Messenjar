@@ -34,40 +34,11 @@ namespace ChatClient
         /// <param name="name"></param>
         /// <param name="friends"></param>
         /// <param name="imageBytes"></param>
-        
         public ChatClientForm(Database db, string name, string friends, byte[] imageBytes)
         {
+            InitializeComponent();
             this.friends = friends;
             database = db;
-            synthesizer = new SpeechSynthesizer();
-            this.name = name;
-            TcpClient Tclient = new TcpClient();
-            try
-            {
-                Tclient.Connect(Program.Config.AsString(IO.ConfigKey.ServerIP), 34563);
-            }
-            catch
-            {
-                MessageBox.Show("Verbindung fehlgeschlagen!", "Verbindungsfehler!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
-               return;
-            }
-            client = new Client(Tclient, this, name);
-            InitializeComponent();
-            if(imageBytes == null || imageBytes.Length <= 0)
-            {
-                imagePictureBox.Image = Properties.Resources.profile;
-            }
-            else
-            {
-                using(MemoryStream stream = new MemoryStream(imageBytes))
-                {
-                    imagePictureBox.Image = Bitmap.FromStream(stream);
-                }
-            }
-            sendButton.TabStop = false;
-            sendButton.FlatStyle = FlatStyle.Flat;
-            sendButton.FlatAppearance.BorderSize = 0;
             List<FriendEntry> entries = new List<FriendEntry>();
             foreach (string friend in friends.Split(';'))
             {
@@ -76,6 +47,36 @@ namespace ChatClient
             }
             friendsList.Update(entries);
             yourFriendsList.Update(entries);
+            synthesizer = new SpeechSynthesizer();
+            this.name = name;
+            chatBox.YourName = name;
+            TcpClient Tclient = new TcpClient();
+            try
+            {
+                Tclient.Connect(Program.Config.AsString(IO.ConfigKey.ServerIP), 34563);
+            }
+            catch
+            {
+                MessageBox.Show("Verbindung fehlgeschlagen!", "Verbindungsfehler!", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                Close();
+                return;
+            }
+            client = new Client(Tclient, this, name);
+            if (imageBytes == null || imageBytes.Length <= 0)
+            {
+                imagePictureBox.Image = Properties.Resources.profile;
+            }
+            else
+            {
+                using (MemoryStream stream = new MemoryStream(imageBytes))
+                {
+                    imagePictureBox.Image = Bitmap.FromStream(stream);
+                }
+            }
+            sendButton.TabStop = false;
+            sendButton.FlatStyle = FlatStyle.Flat;
+            sendButton.FlatAppearance.BorderSize = 0;
         }
 
         /// <summary>
@@ -104,8 +105,9 @@ namespace ChatClient
                 statusPictureBox.Image = null;
                 statusHoverMessage = "";
                 statusHoverTitle = "";
+                chatBox.Clear();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 statusPictureBox.Image = Properties.Resources.error;
                 statusHoverMessage = "Fehler beim Senden der Nachricht aufgetreten! Versuche erneut...";
@@ -124,17 +126,18 @@ namespace ChatClient
             {
                 client.ID = (packet as PacketSendID).ID;
                 client.Write(new PacketSendName(client.Name));
+                if (messageClient != null) messageClient.Write(new PacketSendName(client.Name));
             }
             else if (packet is PacketSendHistory)
             {
-                Dictionary<DateTime, List<MessageData>> dict = ((PacketSendHistory)packet).History;
+                Dictionary<DateTime, List<MessageData>> dict = ((PacketSendHistory) packet).History;
                 Dictionary<DateTime, List<ChatBoxEntry>> convertedDict = new Dictionary<DateTime, List<ChatBoxEntry>>();
                 foreach (DateTime time in dict.Keys)
                 {
                     List<ChatBoxEntry> entries = new List<ChatBoxEntry>();
                     foreach (MessageData data in dict[time])
                     {
-                        entries.Add(new ChatBoxEntry(data.FriendName, data.Message, data.Time));
+                        entries.Add(new ChatBoxEntry(data.Sender, data.Message, data.Time));
                     }
                     convertedDict.Add(time, entries);
                 }
@@ -142,17 +145,23 @@ namespace ChatClient
                 {
                     MethodInvoker invoker = delegate
                     {
+                        chatBox.Clear();
                         chatBox.AddChatMessage(convertedDict, name);
                     };
                     chatBox.Invoke(invoker);
-                } 
+                }
+                else
+                {
+                    chatBox.Clear();
+                    chatBox.AddChatMessage(convertedDict, name);
+                }
             }
             else if (packet is PacketSendNewMessageNotify)
             {
-                string friendName = ((PacketSendNewMessageNotify)packet).FriendName;
-                if(friendsList.Selected != null)
+                string friendName = ((PacketSendNewMessageNotify) packet).FriendName;
+                if (friendsList.Selected != null)
                 {
-                    if(friendsList.Selected.Name == friendName)
+                    if (friendsList.Selected.Name == friendName)
                     {
                         return;
                     }
@@ -160,6 +169,20 @@ namespace ChatClient
                 friendsList.ShowNotify(friendName);
                 synthesizer.Speak("Sie haben Post");
             }
+        }
+
+        public void ClearStatus()
+        {
+            statusHoverTitle = "";
+            statusHoverMessage = "";
+            statusPictureBox.Image = null;
+        }
+
+        public void ShowStatusError(string title, string message)
+        {
+            statusHoverMessage = message;
+            statusHoverTitle = title;
+            statusPictureBox.Image = Properties.Resources.error;
         }
 
         /// <summary>
@@ -182,12 +205,14 @@ namespace ChatClient
             if (messageClient == null)
             {
                 statusPictureBox.Image = Properties.Resources.loading;
-                statusHoverMessage = "Es wird versucht eine Verbindung zu unseren Server aufzubauen. Bitte haben Sie Geduld...";
+                statusHoverMessage =
+                    "Es wird versucht eine Verbindung zu unseren Server aufzubauen. Bitte haben Sie Geduld...";
                 statusHoverTitle = "Verbinde...";
                 TcpClient client = SearchForPort(FirstPort);
-                if(client == null)
+                if (client == null)
                 {
-                    statusHoverMessage = "Es konnte keine Verbindung aufgebaut werden! Es wird in 30 Sekunden nochmal versucht!";
+                    statusHoverMessage =
+                        "Es konnte keine Verbindung aufgebaut werden! Es wird in 30 Sekunden nochmal versucht!";
                     statusHoverTitle = "Fehler beim Verbinden";
                     statusPictureBox.Image = Properties.Resources.error;
                     Thread thread = new Thread(() =>
@@ -228,7 +253,7 @@ namespace ChatClient
             {
                 port++;
                 if (port == 34563) port++;
-                if(port - FirstPort >= 1000)
+                if (port - FirstPort >= 1000)
                 {
                     return null;
                 }
@@ -248,10 +273,9 @@ namespace ChatClient
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        
         private void iconPictureBox_Click(object sender, EventArgs e)
         {
-            if(messageClient != null)
+            if (messageClient != null)
             {
                 messageClient.Close();
                 messageClient = null;
@@ -268,10 +292,9 @@ namespace ChatClient
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-      
         private void statusPictureBox_MouseHover(object sender, EventArgs e)
         {
-            if(statusHoverTitle != "" && statusHoverMessage != "")
+            if (statusHoverTitle != "" && statusHoverMessage != "")
             {
                 hoverTooltip = new ToolTip();
                 hoverTooltip.ToolTipTitle = statusHoverTitle;
@@ -284,14 +307,13 @@ namespace ChatClient
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        
         private void editImageButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "Bilder | *.jpg; *.jpeg; *.png";
-            if(dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
-                Bitmap bitmap = (Bitmap)Bitmap.FromFile(dialog.FileName);
+                Bitmap bitmap = (Bitmap) Bitmap.FromFile(dialog.FileName);
                 imagePictureBox.Image = bitmap;
                 MemoryStream stream = new MemoryStream();
                 bitmap.Save(stream, bitmap.RawFormat);
@@ -305,9 +327,14 @@ namespace ChatClient
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        
         private void addButton_Click(object sender, EventArgs e)
         {
+            if (searchNameTextBox.Text == name)
+            {
+                MessageBox.Show("Du kannst dich nicht selber hinzufügen!", "Fehler!", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
             if (!database.IsUserExisting(searchNameTextBox.Text))
             {
                 MessageBox.Show("Benutzer existiert nicht!", " Fehler!",
@@ -322,12 +349,14 @@ namespace ChatClient
             {
                 if (friends.Contains(searchNameTextBox.Text))
                 {
-                    MessageBox.Show("Du hast bereits " + searchNameTextBox.Text + " als Freund!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Du hast bereits " + searchNameTextBox.Text + " als Freund!", "Error!",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 friends += ";" + searchNameTextBox.Text;
             }
             database.UpdateFriends(name, friends);
+            database.AddFriend(searchNameTextBox.Text, name);
             searchNameTextBox.Clear();
             List<FriendEntry> entries = new List<FriendEntry>();
             foreach (string friend in friends.Split(';'))
@@ -337,7 +366,8 @@ namespace ChatClient
             }
             friendsList.Update(entries);
             yourFriendsList.Update(entries);
-            MessageBox.Show("Freund erfolgreich hinzugefügt!","Hinzugefügt", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Freund erfolgreich hinzugefügt!", "Hinzugefügt", MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         /// <summary>
@@ -345,13 +375,12 @@ namespace ChatClient
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        
         private void removeFriendTextBox_Click(object sender, EventArgs e)
         {
-            if(yourFriendsList.Selected != null)
+            if (yourFriendsList.Selected != null)
             {
                 string name = yourFriendsList.Selected.Name;
-                if(friends.Contains(";" + name))
+                if (friends.Contains(";" + name))
                 {
                     friends = friends.Replace(";" + name, "");
                 }
@@ -368,7 +397,8 @@ namespace ChatClient
                 }
                 friendsList.Update(entries);
                 yourFriendsList.Update(entries);
-                MessageBox.Show("Freund erfolgreich entfernt!", "Entfernt!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Freund erfolgreich entfernt!", "Entfernt!", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
         }
     }

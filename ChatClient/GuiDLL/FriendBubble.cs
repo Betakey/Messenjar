@@ -50,7 +50,7 @@ namespace GuiDLL
             nameLabel.Location = new Point(Height - 5, 0);
             nameLabel.Size = new Size(Width - Height - 5, Height);
             BackColor = Color.White;
-            nameLabel.Font = new System.Drawing.Font(nameLabel.Font.FontFamily, 22, FontStyle.Bold);
+            nameLabel.Font = new System.Drawing.Font(nameLabel.Font.FontFamily, 15, FontStyle.Bold);
             nameLabel.MouseClick += (sender, args) =>
             {
                 BubbleClicked?.Invoke(args);

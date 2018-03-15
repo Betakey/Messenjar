@@ -41,14 +41,14 @@
             // 
             // usernameTextBox
             // 
-            this.usernameTextBox.Location = new System.Drawing.Point(61, 69);
+            this.usernameTextBox.Location = new System.Drawing.Point(59, 44);
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(137, 20);
             this.usernameTextBox.TabIndex = 0;
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(61, 129);
+            this.passwordTextBox.Location = new System.Drawing.Point(59, 104);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '*';
             this.passwordTextBox.Size = new System.Drawing.Size(137, 20);
@@ -57,20 +57,20 @@
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(99, 104);
+            this.passwordLabel.Location = new System.Drawing.Point(97, 79);
             this.passwordLabel.Name = "passwordLabel";
-            this.passwordLabel.Size = new System.Drawing.Size(53, 13);
+            this.passwordLabel.Size = new System.Drawing.Size(50, 13);
             this.passwordLabel.TabIndex = 2;
-            this.passwordLabel.Text = "Password";
+            this.passwordLabel.Text = "Passwort";
             // 
             // usernameLabel
             // 
             this.usernameLabel.AutoSize = true;
-            this.usernameLabel.Location = new System.Drawing.Point(99, 44);
+            this.usernameLabel.Location = new System.Drawing.Point(87, 19);
             this.usernameLabel.Name = "usernameLabel";
-            this.usernameLabel.Size = new System.Drawing.Size(55, 13);
+            this.usernameLabel.Size = new System.Drawing.Size(75, 13);
             this.usernameLabel.TabIndex = 3;
-            this.usernameLabel.Text = "Username";
+            this.usernameLabel.Text = "Benutzername";
             // 
             // registerButton
             // 
@@ -78,7 +78,7 @@
             this.registerButton.Name = "registerButton";
             this.registerButton.Size = new System.Drawing.Size(75, 23);
             this.registerButton.TabIndex = 4;
-            this.registerButton.Text = "Register";
+            this.registerButton.Text = "Registrieren";
             this.registerButton.UseVisualStyleBackColor = true;
             this.registerButton.Click += new System.EventHandler(this.registerButton_Click);
             // 
@@ -88,29 +88,29 @@
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(75, 23);
             this.loginButton.TabIndex = 5;
-            this.loginButton.Text = "Login";
+            this.loginButton.Text = "Einloggen";
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
             // 
             // showPwCheckBox
             // 
             this.showPwCheckBox.AutoSize = true;
-            this.showPwCheckBox.Location = new System.Drawing.Point(84, 155);
+            this.showPwCheckBox.Location = new System.Drawing.Point(82, 140);
             this.showPwCheckBox.Name = "showPwCheckBox";
-            this.showPwCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.showPwCheckBox.Size = new System.Drawing.Size(99, 17);
             this.showPwCheckBox.TabIndex = 6;
-            this.showPwCheckBox.Text = "Show Password";
+            this.showPwCheckBox.Text = "Zeige Passwort";
             this.showPwCheckBox.UseVisualStyleBackColor = true;
             this.showPwCheckBox.CheckedChanged += new System.EventHandler(this.showPwCheckBox_CheckedChanged);
             // 
             // rememberCheckBox
             // 
             this.rememberCheckBox.AutoSize = true;
-            this.rememberCheckBox.Location = new System.Drawing.Point(84, 183);
+            this.rememberCheckBox.Location = new System.Drawing.Point(82, 168);
             this.rememberCheckBox.Name = "rememberCheckBox";
-            this.rememberCheckBox.Size = new System.Drawing.Size(95, 17);
+            this.rememberCheckBox.Size = new System.Drawing.Size(88, 17);
             this.rememberCheckBox.TabIndex = 7;
-            this.rememberCheckBox.Text = "Remember Me";
+            this.rememberCheckBox.Text = "Merke Daten";
             this.rememberCheckBox.UseVisualStyleBackColor = true;
             // 
             // LoginForm
@@ -131,7 +131,7 @@
             this.MaximumSize = new System.Drawing.Size(273, 280);
             this.MinimumSize = new System.Drawing.Size(273, 280);
             this.Name = "LoginForm";
-            this.Text = "LoginForm";
+            this.Text = "MessenJar: Einloggen";
             this.ResumeLayout(false);
             this.PerformLayout();
 

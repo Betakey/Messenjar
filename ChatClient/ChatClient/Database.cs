@@ -44,6 +44,13 @@ namespace ChatClient
             }
         }
 
+        public void AddFriend(string name, string friendName)
+        {
+            string friends = GetFriends(name);
+            friends += ";" + friendName;
+            UpdateFriends(name, friends);
+        }
+
         /// <summary>
         /// Updates friends in the Database.
         /// </summary>
@@ -105,11 +112,35 @@ namespace ChatClient
         }
 
         /// <summary>
+        /// Gets the Friends Column in the Database of the given Name
+        /// </summary>
+        private string GetFriends(string name)
+        {
+            OpenConnection();
+            using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM User WHERE Name = @name", Connection))
+            {
+                cmd.Parameters.Add("@name", MySqlDbType.Text);
+                cmd.Parameters["@name"].Value = name;
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        string friends = reader["Friends"] as string;
+                        CloseConnection();
+                        return friends;
+                    }
+                }
+            }
+            CloseConnection();
+            return "";
+        }
+
+        /// <summary>
         /// Updates the profilImage in the Database.
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="name"></param>
-        
+
         public void ChangePicture(byte[] bytes, string name)
         {
             OpenConnection();
@@ -210,6 +241,7 @@ namespace ChatClient
                         if (friends == null) friends = "";
                         byte[] bytes = reader["ProfileImage"] as byte[];
                         imageBytes = bytes;
+                        CloseConnection();
                         return friends;
                     }
                 }

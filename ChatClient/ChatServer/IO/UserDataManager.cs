@@ -27,9 +27,9 @@ namespace ChatServer.IO
             Datas = new List<UserData>();
             foreach (string filePath in Directory.GetFiles(dirPath))
             {
-                if (Path.GetExtension(filePath).ToLower().Contains("json"))
+                if (Path.GetExtension(filePath).ToLower().Contains("data"))
                 {
-                    Datas.Add(UserData.ToUserData(Path.GetFileNameWithoutExtension(filePath), File.ReadAllText(filePath)));
+                    Datas.Add(UserData.ToUserData(Path.GetFileNameWithoutExtension(filePath), File.ReadAllBytes(filePath)));
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace ChatServer.IO
         {
             foreach (UserData data in Datas)
             {
-                File.WriteAllText(dirPath + "\\" + data.Name + ".json", data.ToString());
+                File.WriteAllBytes(dirPath + "\\" + data.Name + ".data", data.ToBytes());
             }
         }
     }

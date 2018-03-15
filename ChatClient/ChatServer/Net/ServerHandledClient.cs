@@ -66,7 +66,7 @@ namespace ChatServer.Net
         /// </summary>
         public void Close()
         {
-            Thread.Abort();
+            Thread.Interrupt();
             In.Close();
             Out.Close();
         }
