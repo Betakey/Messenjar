@@ -37,15 +37,25 @@ namespace ChatServer.Net
                     Program.Instance.UserDataManager.Datas.Add(receiverData);
                 }
                 receiverData.MessageHistory.Add(new MessageData(client.Name, _packet.Text, _packet.Time));
-                ServerHandledClient receiver = Program.Instance.NetworkServer.GetClient(_packet.Receiver);
+                ServerHandledClient receiver = Program.Instance.MessageServerHandler.GetClient(_packet.Receiver);
                 if (receiver != null)
                 {
                     receiver.SendPacket(new PacketSendHistory(receiverData.SortMessageByDate()));
                 }
                 else
                 {
-                    receiverData.NewMessages.Add(client.Name);
+                    ServerHandledClient networkReceiver = Program.Instance.NetworkServer.GetClient(_packet.Receiver);
+                    if (networkReceiver != null)
+                    {
+                        networkReceiver.SendPacket(new PacketSendNewMessageNotify(client.Name));
+                    }
+                    else
+                    {
+
+                        receiverData.NewMessages.Add(client.Name);
+                    }
                 }
+                Program.Instance.UserDataManager.Save();
             }
         }
     }

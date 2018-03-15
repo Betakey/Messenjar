@@ -10,8 +10,14 @@ namespace ChatServer.IO
 {
     public class UserDataManager
     {
+        /// <summary>
+        /// The Path to the Dir where the UserData is storing
+        /// </summary>
         private string dirPath;
 
+        /// <summary>
+        /// Stores all loaded UserData
+        /// </summary>
         public List<UserData> Datas { get; private set; }
 
         public UserDataManager()
@@ -28,6 +34,11 @@ namespace ChatServer.IO
             }
         }
 
+        /// <summary>
+        /// Gets the Data of the Client to the given Name
+        /// </summary>
+        /// <param name="name">The Name of the Client</param>
+        /// <returns>A UserData Object</returns>
         public UserData GetData(string name)
         {
             try
@@ -40,6 +51,9 @@ namespace ChatServer.IO
             }
         }
 
+        /// <summary>
+        /// Saves all UserData
+        /// </summary>
         public void Save()
         {
             foreach (UserData data in Datas)

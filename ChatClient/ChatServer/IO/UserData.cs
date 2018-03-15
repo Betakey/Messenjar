@@ -24,6 +24,31 @@ namespace ChatServer.IO
             NewMessages = new List<string>();
         }
 
+        public Dictionary<DateTime, List<MessageData>> SortMessgaeByDate(string friendName)
+        {
+            Dictionary<DateTime, List<MessageData>> dict = new Dictionary<DateTime, List<MessageData>>();
+            foreach (MessageData data in MessageHistory)
+            {
+                if(data.FriendName != friendName) continue;
+                DateTime date = data.Time.Date;
+                if (dict.ContainsKey(date))
+                {
+                    List<MessageData> datas = dict[date];
+                    datas.Add(data);
+                    datas.Sort((a, b) => b.Time.CompareTo(a.Time));
+                    dict[date] = datas;
+                }
+                else
+                {
+                    List<MessageData> datas = new List<MessageData>();
+                    datas.Add(data);
+                    datas.Sort((a, b) => b.Time.CompareTo(a.Time));
+                    dict[date] = datas;
+                }
+            }
+            return dict;
+        }
+
         public Dictionary<DateTime, List<MessageData>> SortMessageByDate()
         {
             Dictionary<DateTime, List<MessageData>> dict = new Dictionary<DateTime, List<MessageData>>();

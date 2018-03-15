@@ -8,9 +8,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ChatServer</RootNamespace>
     <AssemblyName>ChatServer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -62,6 +63,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GuiDLL\GuiDLL.csproj">
+      <Project>{76f4a204-d516-423d-a70e-38d89930999a}</Project>
+      <Name>GuiDLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NetDLL\NetDLL.csproj">
       <Project>{c19e4f8a-8bd8-4303-aaa2-0ece53f7450d}</Project>
       <Name>NetDLL</Name>

@@ -12,24 +12,47 @@ namespace ChatServer.Net
 {
     public class ServerHandledClient
     {
+        /// <summary>
+        /// The ID of the Client
+        /// </summary>
         public Guid ID { get; private set; }
 
+        /// <summary>
+        /// The Name of the Client
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// The Net Object / The TcpConnection of the Client
+        /// </summary>
         public TcpClient Client { get; private set; }
 
+        /// <summary>
+        /// The StreamReader of the Client to read Data from the Client
+        /// </summary>
         public StreamReader In { get; private set; }
 
+        /// <summary>
+        /// The StreamWriter of the Client to send Data to the Client
+        /// </summary>
         public StreamWriter Out { get; private set; }
 
+        /// <summary>
+        /// The Receiving Thread which waits for Data income
+        /// </summary>
         public Thread Thread { get; private set; }
 
+        /// <summary>
+        /// An Reference of the Server
+        /// </summary>
         private Server server;
 
         public ServerHandledClient(TcpClient client, Server server)
         {
             this.server = server;
             Client = client;
+            In = new StreamReader(client.GetStream());
+            Out = new StreamWriter(client.GetStream());
             ID = Guid.NewGuid();
             Thread = new Thread(Receive);
             Thread.Start();
@@ -53,10 +76,11 @@ namespace ChatServer.Net
         /// </summary>
         public void SendPacket(Packet packet)
         {
-            Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
+            Console.WriteLine("[" + server.Port + "] <- Sending Packet to " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType().ToString().Replace("NetDLL.", "").Replace("Packet", "") + ")");
             //Out.WriteLine(Cryptor.Encrypt(ID.ToString(), packet.ToString()));
-            Out.WriteLine(packet.ToString());
-            Out.Flush();
+            byte[] bytes = packet.ToBytes();
+            Client.GetStream().Write(BitConverter.GetBytes(bytes.Length), 0, BitConverter.GetBytes(bytes.Length).Length);
+            Client.GetStream().Write(bytes, 0, bytes.Length);
         }
 
         /// <summary>
@@ -72,23 +96,33 @@ namespace ChatServer.Net
             {
                 while (true)
                 {
-                    string s = In.ReadLine();
-                    if (s != null)
+                    int bytesRead = 0;
+                    int bufferSize = 0;
+                    byte[] datalength = new byte[4];
+                    Client.GetStream().Read(datalength, 0, datalength.Length);
+                    bufferSize = BitConverter.ToInt32(datalength, 0);
+
+                    if (bufferSize != 0)
                     {
-                        //Packet packet = Packet.ToPacket(Cryptor.Decrypt(ID.ToString(), s));
-                        Packet packet = Packet.ToPacket(s);
+                        byte[] bytes = new byte[bufferSize];
+                        bytesRead = Client.GetStream().Read(bytes, 0, bufferSize);
+                        if (bytesRead == 0)
+                        {
+                            continue;
+                        }
+                        Packet packet = Packet.ToPacket(bytes);
                         if (packet != null)
                         {
-                            Console.WriteLine("[" + server.Port + "] -> Packet received from " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType() + ")");
+                            Console.WriteLine("[" + server.Port + "] -> Packet received from " + Client.Client.LocalEndPoint + " (Type: " + packet.GetType().ToString().Replace("NetDLL.", "").Replace("Packet", "") + ")");
                             server.OnPacketReceived(this, packet);
                         }
                     }
                 }
             }
-            catch
+            catch(Exception)
             {
-                Console.WriteLine("[" + server.Port + "] <> Client (IP: " + Client.Client.LocalEndPoint + ") disconnected");
                 server.OnClientDisconnect(this);
+                Console.WriteLine("[" + server.Port + "] <> Client (IP: " + Client.Client.LocalEndPoint + ") disconnected");
                 Close();
             }
         }

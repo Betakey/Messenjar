@@ -11,6 +11,9 @@ namespace ChatServer
 {
     class Program
     {
+        /// <summary>
+        /// The Program Instance
+        /// </summary>
         public static Program Instance { get; private set; }
 
         static void Main(string[] args)
@@ -18,12 +21,24 @@ namespace ChatServer
             new Program();
         }
 
+        /// <summary>
+        /// The running Network Server which is controlling every Packet except Messaging
+        /// </summary>
         public NetworkServer NetworkServer { get; private set; }
 
+        /// <summary>
+        /// The Instance of the Config to get some settings
+        /// </summary>
         public Config Config { get; private set; }
 
+        /// <summary>
+        /// The UserData Manager which manages all the UserData
+        /// </summary>
         public UserDataManager UserDataManager { get; private set; }
 
+        /// <summary>
+        /// The MessageServer Handler which handles all the Message Servers
+        /// </summary>
         public MessageServerHandler MessageServerHandler { get; private set; }
 
         public Program()
@@ -34,6 +49,11 @@ namespace ChatServer
             PostInit();
         }
 
+        /// <summary>
+        /// Pre Initialize
+        /// - Setting up Console Window
+        /// - Instantiate some Objects
+        /// </summary>
         private void PreInit()
         {
             Console.Title = "MessenJar Sever";
@@ -83,6 +103,11 @@ namespace ChatServer
             MessageServerHandler = new MessageServerHandler();
         }
 
+        /// <summary>
+        /// Main Initialize
+        /// - Starting Network Server
+        /// - Starting Message Server Handler
+        /// </summary>
         private void Init()
         {
             string ip = "";
@@ -96,8 +121,13 @@ namespace ChatServer
             }
             NetworkServer = new NetworkServer(ip);
             NetworkServer.Start();
+            MessageServerHandler.StartNewServer();
         }
 
+        /// <summary>
+        /// Post Initialize of the Server
+        /// - Waiting for ESCAPE Input to Close the Server
+        /// </summary>
         private void PostInit()
         {
             Console.WriteLine("If you want to stop the Server and exit the Program. Just press ESCAPE [ESC]");
