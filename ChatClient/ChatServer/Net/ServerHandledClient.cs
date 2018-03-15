@@ -12,18 +12,39 @@ namespace ChatServer.Net
 {
     public class ServerHandledClient
     {
+        /// <summary>
+        /// The ID of the Client
+        /// </summary>
         public Guid ID { get; private set; }
 
+        /// <summary>
+        /// The Name of the Client
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// The Net Object / The TcpConnection of the Client
+        /// </summary>
         public TcpClient Client { get; private set; }
 
+        /// <summary>
+        /// The StreamReader of the Client to read Data from the Client
+        /// </summary>
         public StreamReader In { get; private set; }
 
+        /// <summary>
+        /// The StreamWriter of the Client to send Data to the Client
+        /// </summary>
         public StreamWriter Out { get; private set; }
 
+        /// <summary>
+        /// The Receiving Thread which waits for Data income
+        /// </summary>
         public Thread Thread { get; private set; }
 
+        /// <summary>
+        /// An Reference of the Server
+        /// </summary>
         private Server server;
 
         public ServerHandledClient(TcpClient client, Server server)

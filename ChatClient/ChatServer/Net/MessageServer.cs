@@ -55,6 +55,7 @@ namespace ChatServer.Net
                         receiverData.NewMessages.Add(client.Name);
                     }
                 }
+                Program.Instance.UserDataManager.Save();
             }
         }
     }
