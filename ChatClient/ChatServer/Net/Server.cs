@@ -108,8 +108,9 @@ namespace ChatServer.Net
                 while (IsAlive)
                 {
                     TcpClient client = Listener.AcceptTcpClient();
-                    if (Clients.Count >= 10)
+                    if (IsFull(Clients.Count))
                     {
+                        client.GetStream().Close();
                         client.Close();
                         Console.WriteLine("[" + Port + "] -> Client declined because of missing Space! (IP-Endpoint: " + client.Client.LocalEndPoint + ")");
                         continue;
@@ -127,6 +128,19 @@ namespace ChatServer.Net
             }
         }
 
+
+        /// <summary>
+        /// Checks if the Server is full
+        /// </summary>
+        protected virtual bool IsFull(int count)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the connected Client to the given Name
+        /// </summary>
+        /// <returns>ServerHandledClient Object of the connected Client</returns>
         public ServerHandledClient GetClient(string name)
         {
             try

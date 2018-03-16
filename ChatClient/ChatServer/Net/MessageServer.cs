@@ -15,6 +15,12 @@ namespace ChatServer.Net
         {
         }
 
+        protected override bool IsFull(int count)
+        {
+            return count >= 10;
+        }
+
+
         public override void OnPacketReceived(ServerHandledClient client, Packet packet)
         {
             if (packet is PacketSendText)
